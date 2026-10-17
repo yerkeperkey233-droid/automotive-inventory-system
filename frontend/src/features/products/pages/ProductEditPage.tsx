@@ -28,10 +28,10 @@ const ProductEditPage: React.FC = () => {
       amount: 0,
     },
     validate: {
-      sku: (value) => (value.length === 0 ? 'SKU is required' : null),
-      name: (value) => (value.length === 0 ? 'Name is required' : null),
-      base_unit: (value) => (value ? null : 'Unit is required'),
-      amount: (value) => (value < 0 ? 'Amount must be non-negative' : null),
+      sku: (value) => (value.length === 0 ? '请输入商品编码' : null),
+      name: (value) => (value.length === 0 ? '请输入名称' : null),
+      base_unit: (value) => (value ? null : '请选择计量单位'),
+      amount: (value) => (value < 0 ? '含量不能为负数' : null),
     },
   });
   const hasInitializedForm = React.useRef(false);
@@ -68,13 +68,13 @@ const ProductEditPage: React.FC = () => {
   };
 
   if (productQuery.isLoading) {
-    return <LoadingState message="Loading product..." />;
+    return <LoadingState message="正在加载商品…" />;
   }
 
   if (productQuery.isError || !productQuery.data) {
     return (
       <ErrorState
-        message="Failed to load product"
+        message="加载商品失败"
         onRetry={() => productQuery.refetch()}
       />
     );
@@ -89,8 +89,8 @@ const ProductEditPage: React.FC = () => {
     <Container size="md" py="xl">
       <Stack gap="lg">
         <ProductHeader
-          title="Edit Product"
-          subtitle={`Update ${productQuery.data.name} (${productQuery.data.sku})`}
+          title="编辑商品"
+          subtitle={`编辑 ${productQuery.data.name}（${productQuery.data.sku}）`}
           // actions={
           //   <Group>
           //     <Button
@@ -108,7 +108,7 @@ const ProductEditPage: React.FC = () => {
           form={form}
           errorMessage={errorMessage}
           isSubmitting={updateMutation.isPending}
-          submitLabel="Save Changes"
+          submitLabel="保存修改"
           onSubmit={handleSubmit}
           onCancel={() => navigate(detailPath)}
         />

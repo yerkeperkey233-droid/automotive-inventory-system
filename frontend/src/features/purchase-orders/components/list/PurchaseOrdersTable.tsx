@@ -26,14 +26,14 @@ export const PurchaseOrdersTable: React.FC<PurchaseOrdersTableProps> = ({
 }) => {
   const renderProductsCell = (items: PurchaseOrderItem[] | undefined) => {
     if (!items?.length) {
-      return 'N/A';
+      return '暂无';
     }
 
     return (
       <OrderProductsBadges
         items={items.map((item) => ({
           id: item.id,
-          label: item.product?.name || item.product_name || 'Product',
+          label: item.product?.name || item.product_name || '商品',
           quantity: item.quantity,
         }))}
         badgeColor="teal"
@@ -42,38 +42,38 @@ export const PurchaseOrdersTable: React.FC<PurchaseOrdersTableProps> = ({
   };
 
   const columns = [
-    { key: 'order_number', label: 'Order Code', align: 'center' as const, width: '15%' },
+    { key: 'order_number', label: '订单编号', align: 'center' as const, width: '15%' },
     {
       key: 'supplier_name',
-      label: 'Supplier',
+      label: '供应商',
       align: 'center' as const,
       width: '18%',
-      render: (value: string) => value || 'N/A',
+      render: (value: string) => value || '暂无',
     },
     {
       key: 'items',
-      label: 'Products',
+      label: '商品管理',
       align: 'center' as const,
       width: '25%',
       render: (value: PurchaseOrderItem[] | undefined) => renderProductsCell(value),
     },
     {
       key: 'ordered_at',
-      label: 'Order Date',
+      label: '订单日期',
       align: 'center' as const,
       width: '16%',
       render: (value: string) => formatDate(value),
     },
     {
       key: 'total_cost',
-      label: 'Total Cost',
+      label: '总成本',
       align: 'center' as const,
       width: '13%',
       render: (value: number) => formatCurrency(value),
     },
     {
       key: 'status',
-      label: 'Status',
+      label: '状态',
       align: 'center' as const,
       width: '13%',
       render: (value: string) => <StatusBadge status={value as 'draft' | 'received' | 'cancelled'} />,
@@ -88,7 +88,7 @@ export const PurchaseOrdersTable: React.FC<PurchaseOrdersTableProps> = ({
       onRowClick={(row) => onRowClick(row as PurchaseOrder)}
       renderRowActions={(row: any) => (
         <Group gap={4} wrap="nowrap" justify="center">
-          <Tooltip label="Edit order">
+          <Tooltip label="编辑订单">
             <ActionIcon
               variant="subtle"
               color="blue"
@@ -100,7 +100,7 @@ export const PurchaseOrdersTable: React.FC<PurchaseOrdersTableProps> = ({
               <IconPencil size={16} />
             </ActionIcon>
           </Tooltip>
-          <Tooltip label="Delete order">
+          <Tooltip label="删除订单">
             <ActionIcon
               variant="subtle"
               color="red"

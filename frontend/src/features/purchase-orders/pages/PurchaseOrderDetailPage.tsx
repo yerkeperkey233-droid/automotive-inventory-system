@@ -55,7 +55,7 @@ const PurchaseOrderDetailPage: React.FC = () => {
         await deleteMutation.mutateAsync(orderId);
         navigate('/purchase-orders');
       } catch (error) {
-        console.error('Delete failed:', error);
+        console.error('删除失败：', error);
       }
     }
   };
@@ -68,7 +68,7 @@ const PurchaseOrderDetailPage: React.FC = () => {
       await confirmMutation.mutateAsync(orderId!);
       query.refetch();
     } catch (error: any) {
-      const message = error?.response?.data?.detail || error?.response?.data?.error || 'Failed to confirm order';
+      const message = error?.response?.data?.detail || error?.response?.data?.error || '确认订单失败';
       setErrorAlert({ isOpen: true, message });
     }
   };
@@ -81,7 +81,7 @@ const PurchaseOrderDetailPage: React.FC = () => {
       await cancelMutation.mutateAsync(orderId!);
       query.refetch();
     } catch (error: any) {
-      const message = error?.response?.data?.detail || error?.response?.data?.error || 'Failed to cancel order';
+      const message = error?.response?.data?.detail || error?.response?.data?.error || '取消订单失败';
       setErrorAlert({ isOpen: true, message });
     }
   };
@@ -99,7 +99,7 @@ const PurchaseOrderDetailPage: React.FC = () => {
       setShowReceiveModal(false);
       query.refetch();
     } catch (error: any) {
-      const message = error?.response?.data?.detail || error?.response?.data?.error || 'Failed to receive order';
+      const message = error?.response?.data?.detail || error?.response?.data?.error || '订单收货失败';
       setErrorAlert({ isOpen: true, message });
     }
   };
@@ -115,24 +115,24 @@ const PurchaseOrderDetailPage: React.FC = () => {
       if (errorData?.requires_confirmation) {
         const count = errorData.stock_entry_count || 0;
         setReopenMessage(
-          `This purchase order still has ${count} linked stock entr${count === 1 ? 'y' : 'ies'}. Reopening it will delete them. Do you want to continue?`
+          `该采购订单关联 ${count} 条入库记录，重新打开订单将删除这些记录。确定继续吗？`
         );
         setShowReopenModal(true);
         return;
       }
-      const message = errorData?.detail || errorData?.error || 'Failed to reopen order';
+      const message = errorData?.detail || errorData?.error || '重新打开订单失败';
       setErrorAlert({ isOpen: true, message });
     }
   };
 
   if (query.isLoading) {
-    return <LoadingState message="Loading purchase order..." />;
+    return <LoadingState message="正在加载采购订单…" />;
   }
 
   if (query.isError || !query.data) {
     return (
       <ErrorState
-        message="Failed to load purchase order"
+        message="加载采购订单失败"
         onRetry={() => query.refetch()}
       />
     );
@@ -165,7 +165,7 @@ const PurchaseOrderDetailPage: React.FC = () => {
             variant="light"
             onClick={() => navigate('/purchase-orders')}
           >
-            Back
+            返回
           </Button>
         </Group>
 
@@ -185,17 +185,17 @@ const PurchaseOrderDetailPage: React.FC = () => {
         <Modal
           opened={showReopenModal}
           onClose={() => setShowReopenModal(false)}
-          title="Reopen Purchase Order"
+          title="重新打开采购订单"
           centered
         >
           <Stack>
             <Text>{reopenMessage}</Text>
             <Group justify="flex-end">
               <Button variant="light" onClick={() => setShowReopenModal(false)}>
-                Cancel
+                取消
               </Button>
               <Button loading={reopenMutation.isPending} color="orange" onClick={() => handleReopenOrder(true)}>
-                Reopen And Delete Stock Entries
+                重新打开并删除入库记录
               </Button>
             </Group>
           </Stack>

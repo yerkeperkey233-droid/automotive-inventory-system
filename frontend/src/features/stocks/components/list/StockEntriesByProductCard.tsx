@@ -21,21 +21,21 @@ export const StockEntriesByProductCard: React.FC<StockEntriesByProductCardProps>
   const columns = [
     {
       key: 'stock_identifier',
-      label: 'Identifier',
+      label: '入库编号',
       width: '12%',
       align: 'center' as const,
       render: (value: number | string) => <strong>{value}</strong>,
     },
     {
       key: 'source_type',
-      label: 'Source',
+      label: '来源',
       width: '20%',
       align: 'center' as const,
       render: (value: string, row: StockEntry) => (
         <Stack gap={4} align="center">
           {value === 'manual' ? (
             <Badge variant="light" color="gray">
-              manual
+              手工入库
             </Badge>
           ) : null}
           {value === 'purchase_order' && row.purchase_order_id ? (
@@ -45,7 +45,7 @@ export const StockEntriesByProductCard: React.FC<StockEntriesByProductCardProps>
               size="sm"
               onClick={(event) => event.stopPropagation()}
             >
-              {row.purchase_order_number || `PO #${row.purchase_order_id}`}
+              {row.purchase_order_number || `采购订单 #${row.purchase_order_id}`}
             </Anchor>
           ) : null}
         </Stack>
@@ -53,31 +53,31 @@ export const StockEntriesByProductCard: React.FC<StockEntriesByProductCardProps>
     },
     {
       key: 'quantity_available',
-      label: 'Available',
+      label: '可用数量',
       width: '14%',
       align: 'center' as const,
       render: (value: number | string) => <strong>{formatNumber(value)}</strong>,
     },
     {
       key: 'quantity_received',
-      label: 'Received',
+      label: '已收货',
       width: '14%',
       align: 'center' as const,
       render: (value: number | string) => formatNumber(value),
     },
     {
       key: 'received_at',
-      label: 'Receipt Date',
+      label: '收货日期',
       width: '20%',
       align: 'center' as const,
       render: (value: string) => formatDate(value),
     },
     {
       key: 'expiration_date',
-      label: 'Expires',
+      label: '到期日期',
       width: '20%',
       align: 'center' as const,
-      render: (value: string | undefined) => (value ? formatDate(value) : 'N/A'),
+      render: (value: string | undefined) => (value ? formatDate(value) : '暂无'),
     },
   ];
 
@@ -87,17 +87,17 @@ export const StockEntriesByProductCard: React.FC<StockEntriesByProductCardProps>
         <Group justify="space-between">
           <Stack gap={0}>
             <Text fw={700} size="lg">
-              Stock Entries
+              入库记录
             </Text>
             {/* <Text size="sm" c="dimmed">
-              All stock entries for this product
+              该商品的全部入库记录
             </Text> */}
           </Stack>
-          <Badge variant="light">{entries.length} entries</Badge>
+          <Badge variant="light">{entries.length} 条入库记录</Badge>
         </Group>
 
         {entries.length === 0 ? (
-          <Text c="dimmed">No stock entries found for this product.</Text>
+          <Text c="dimmed">该商品暂无入库记录。</Text>
         ) : (
           <DataTable
             columns={columns}
@@ -106,7 +106,7 @@ export const StockEntriesByProductCard: React.FC<StockEntriesByProductCardProps>
             tableMinWidth={900}
             renderRowActions={(row: StockEntry) => (
               <Group gap={4} wrap="nowrap" justify="center">
-                <Tooltip label="Edit stock entry">
+                <Tooltip label="编辑入库记录">
                   <ActionIcon
                     variant="subtle"
                     color="blue"
@@ -118,7 +118,7 @@ export const StockEntriesByProductCard: React.FC<StockEntriesByProductCardProps>
                     <IconPencil size={16} />
                   </ActionIcon>
                 </Tooltip>
-                <Tooltip label="Delete stock entry">
+                <Tooltip label="删除入库记录">
                   <ActionIcon
                     variant="subtle"
                     color="red"

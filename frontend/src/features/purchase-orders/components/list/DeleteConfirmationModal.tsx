@@ -18,21 +18,21 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
     <Modal
       opened={opened}
       onClose={onClose}
-      title="Delete Purchase Order"
+      title="删除采购订单"
       centered
     >
       <Stack>
-        <Text>Are you sure you want to delete this purchase order? This action cannot be undone.</Text>
+        <Text>确定删除该采购订单吗？此操作无法撤销。</Text>
         <Group justify="flex-end">
           <Button variant="light" onClick={onClose}>
-            Cancel
+            取消
           </Button>
           <Button
             color="red"
             loading={isLoading}
             onClick={onConfirm}
           >
-            Delete
+            删除
           </Button>
         </Group>
       </Stack>

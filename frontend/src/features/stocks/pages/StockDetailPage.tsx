@@ -93,9 +93,9 @@ const StockDetailsPage: React.FC = () => {
     },
     validate: {
       quantity_received: (value: number) =>
-        value <= 0 ? 'Quantity must be greater than 0' : null,
+        value <= 0 ? '数量必须大于 0' : null,
       received_at: (value: string) =>
-        value.length === 0 ? 'Received date is required' : null,
+        value.length === 0 ? '请选择入库日期' : null,
     },
   });
 
@@ -106,7 +106,7 @@ const StockDetailsPage: React.FC = () => {
       await deleteMutation.mutateAsync(deleteModal.entry.id);
       setDeleteModal({ isOpen: false, entry: null });
     } catch (error) {
-      console.error('Failed to delete stock entry', error);
+      console.error('删除入库记录失败', error);
     }
   };
 
@@ -127,13 +127,13 @@ const StockDetailsPage: React.FC = () => {
   };
 
   if (productQuery.isLoading || stockEntriesQuery.isLoading || stockAllocationsQuery.isLoading) {
-    return <LoadingState message="Loading stock details..." />;
+    return <LoadingState message="正在加载库存详情…" />;
   }
 
   if (productQuery.isError || stockEntriesQuery.isError || stockAllocationsQuery.isError || !productQuery.data) {
     return (
       <ErrorState
-        message="Failed to load stock details"
+        message="加载库存详情失败"
         onRetry={() => {
           productQuery.refetch();
           stockEntriesQuery.refetch();
@@ -159,7 +159,7 @@ const StockDetailsPage: React.FC = () => {
 
       return {
         value: String(item.id),
-        label: `${item.sales_order_code || `Order #${item.sales_order}`} · ${item.product_name || product.name} · remaining ${formatNumber(remainingQuantity, quantityDecimals)}`,
+        label: `${item.sales_order_code || `订单 #${item.sales_order}`} · ${item.product_name || product.name} · 剩余数量 ${formatNumber(remainingQuantity, quantityDecimals)}`,
         remainingQuantity,
       };
     })
@@ -167,25 +167,25 @@ const StockDetailsPage: React.FC = () => {
 
   const handleCreateAllocation = async () => {
     if (!allocationEntryId) {
-      setAllocationError('Stock entry is required.');
+      setAllocationError('请选择入库记录。');
       return;
     }
 
     const numericQuantity =
       typeof allocationQuantity === 'number' ? allocationQuantity : Number(allocationQuantity);
     if (!Number.isFinite(numericQuantity) || numericQuantity <= 0) {
-      setAllocationError('Quantity must be greater than zero.');
+      setAllocationError('数量必须大于 0。');
       return;
     }
 
     if (!selectedEntry) {
-      setAllocationError('Select a valid stock entry.');
+      setAllocationError('请选择有效的入库记录。');
       return;
     }
 
     if (numericQuantity - Number(selectedEntry.quantity_available) > 0.0001) {
       setAllocationError(
-        `Quantity cannot exceed ${formatNumber(selectedEntry.quantity_available, quantityDecimals)} for the selected stock entry.`
+        `数量不能超过所选入库记录的可用数量 ${formatNumber(selectedEntry.quantity_available, quantityDecimals)}。`
       );
       return;
     }
@@ -201,19 +201,19 @@ const StockDetailsPage: React.FC = () => {
 
     if (allocationType === 'sale') {
       if (!salesOrderItemId) {
-        setAllocationError('Sales order item is required for sale allocations.');
+        setAllocationError('销售出库分配必须关联销售订单明细。');
         return;
       }
 
       const selectedSalesOption = salesAllocationOptions.find((item) => item.value === salesOrderItemId);
       if (!selectedSalesOption) {
-        setAllocationError('Select a valid sales order item.');
+        setAllocationError('请选择有效的销售订单明细。');
         return;
       }
 
       if (numericQuantity - selectedSalesOption.remainingQuantity > 0.0001) {
         setAllocationError(
-          `Quantity cannot exceed ${formatNumber(selectedSalesOption.remainingQuantity, quantityDecimals)} for the selected sales order item.`
+          `数量不能超过所选销售订单明细的剩余数量 ${formatNumber(selectedSalesOption.remainingQuantity, quantityDecimals)}。`
         );
         return;
       }
@@ -242,7 +242,7 @@ const StockDetailsPage: React.FC = () => {
       });
       resetStockEntryModal();
     } catch (error) {
-      console.error('Failed to create stock entry', error);
+      console.error('创建入库记录失败', error);
     }
   };
 
@@ -251,7 +251,7 @@ const StockDetailsPage: React.FC = () => {
       <Stack gap="lg">
         <Group justify="space-between" align="flex-start">
           <Stack gap={0}>
-            <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700 }}>Stock Details</h1>
+            <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700 }}>库存详情</h1>
             <Text size="sm" c="dimmed">
               {product.name} ({product.sku})
             </Text>
@@ -261,13 +261,13 @@ const StockDetailsPage: React.FC = () => {
               onClick={() => setAllocationModalOpen(true)}
               disabled={availableEntries.length === 0}
             >
-              Add Stock Allocation
+              新增库存分配
             </Button>
             <Button variant="light" color="teal" onClick={() => setStockEntryModalOpen(true)}>
-              Add Stock Entry
+              新增入库记录
             </Button>
             <Button variant="light" color="blue" onClick={() => navigate(ROUTES.stocks)}>
-              Back
+              返回
             </Button>
           </Group>
         </Group>
@@ -277,10 +277,10 @@ const StockDetailsPage: React.FC = () => {
             <Group justify="space-between">
               <Stack gap={0}>
                 <Text fw={700} size="lg">
-                  Product Stock Summary
+                  商品库存汇总
                 </Text>
                 {/* <Text size="sm" c="dimmed">
-                  Current inventory position for this product
+                  该商品的当前库存情况
                 </Text> */}
               </Stack>
             </Group>
@@ -288,25 +288,25 @@ const StockDetailsPage: React.FC = () => {
             <Grid>
               <Grid.Col span={{ base: 12, sm: 6, lg: 3 }}>
                 <StockMetric
-                  label="Quantity In Stock"
+                  label="库存数量"
                   value={formatNumber(product.available_quantity, quantityDecimals)}
                 />
               </Grid.Col>
               <Grid.Col span={{ base: 12, sm: 6, lg: 3 }}>
                 <StockMetric
-                  label="Inventory Value"
+                  label="库存金额"
                   value={formatCurrency(product.total_inventory_value)}
                   valueColor="blue.7"
                 />
               </Grid.Col>
               <Grid.Col span={{ base: 12, sm: 6, lg: 3 }}>
                 <StockMetric
-                  label="Stock Allocations"
+                  label="库存分配"
                   value={String(allocations.length)}
                 />
               </Grid.Col>
               <Grid.Col span={{ base: 12, sm: 6, lg: 3 }}>
-                <StockMetric label="Stock Entries" value={String(entries.length)} />
+                <StockMetric label="入库记录" value={String(entries.length)} />
               </Grid.Col>
             </Grid>
           </Stack>
@@ -327,26 +327,26 @@ const StockDetailsPage: React.FC = () => {
         <Modal
           opened={deleteModal.isOpen}
           onClose={() => setDeleteModal({ isOpen: false, entry: null })}
-          title="Delete Stock Entry"
+          title="删除入库记录"
           centered
         >
           <Stack>
             <Text>
-              Are you sure you want to delete this stock entry? This action cannot be undone.
+              确定删除该入库记录吗？此操作无法撤销。
             </Text>
             <Group justify="flex-end">
               <Button
                 variant="light"
                 onClick={() => setDeleteModal({ isOpen: false, entry: null })}
               >
-                Cancel
+                取消
               </Button>
               <Button
                 color="red"
                 loading={deleteMutation.isPending}
                 onClick={handleDeleteConfirm}
               >
-                Delete
+                删除
               </Button>
             </Group>
           </Stack>
@@ -355,7 +355,7 @@ const StockDetailsPage: React.FC = () => {
         <Modal
           opened={stockEntryModalOpen}
           onClose={resetStockEntryModal}
-          title="Add Stock Entry"
+          title="新增入库记录"
           centered
         >
           <form onSubmit={stockEntryForm.onSubmit(handleCreateStockEntry)}>
@@ -368,7 +368,7 @@ const StockDetailsPage: React.FC = () => {
 
               <Stack gap={4}>
                 <Text size="sm" fw={500}>
-                  Product
+                  商品
                 </Text>
                 <Text size="sm" c="dimmed">
                   {product.name} ({product.sku})
@@ -376,7 +376,7 @@ const StockDetailsPage: React.FC = () => {
               </Stack>
 
               <NumberInput
-                label="Quantity Received"
+                label="入库数量"
                 min={1}
                 decimalScale={quantityDecimals}
                 step={quantityDecimals === 0 ? 1 : 0.01}
@@ -386,7 +386,7 @@ const StockDetailsPage: React.FC = () => {
               />
 
               <TextInput
-                label="Received Date"
+                label="入库日期"
                 type="date"
                 {...stockEntryForm.getInputProps('received_at')}
                 disabled={createStockEntryMutation.isPending}
@@ -394,7 +394,7 @@ const StockDetailsPage: React.FC = () => {
               />
 
               <TextInput
-                label="Expiration Date (Optional)"
+                label="有效期截止日期（选填）"
                 type="date"
                 {...stockEntryForm.getInputProps('expiration_date')}
                 disabled={createStockEntryMutation.isPending}
@@ -406,10 +406,10 @@ const StockDetailsPage: React.FC = () => {
                   onClick={resetStockEntryModal}
                   disabled={createStockEntryMutation.isPending}
                 >
-                  Cancel
+                  取消
                 </Button>
                 <Button type="submit" loading={createStockEntryMutation.isPending}>
-                  Create Stock Entry
+                  创建入库记录
                 </Button>
               </Group>
             </Stack>
@@ -419,7 +419,7 @@ const StockDetailsPage: React.FC = () => {
         <Modal
           opened={allocationModalOpen}
           onClose={resetAllocationModal}
-          title="Add Stock Allocation"
+          title="新增库存分配"
           centered
         >
           <Stack gap="md">
@@ -431,16 +431,16 @@ const StockDetailsPage: React.FC = () => {
 
             {availableEntries.length === 0 ? (
               <Alert icon={<IconAlertCircle size={16} />} color="orange" variant="light">
-                Add stock first before creating an allocation.
+                请先新增库存，再创建分配。
               </Alert>
             ) : (
               <>
                 <Select
-                  label="Stock Entry"
-                  placeholder="Select stock entry"
+                  label="入库记录"
+                  placeholder="请选择入库记录"
                   data={availableEntries.map((entry) => ({
                     value: String(entry.id),
-                    label: `${entry.stock_identifier} · available ${formatNumber(entry.quantity_available, quantityDecimals)}`,
+                    label: `${entry.stock_identifier} · 可用数量 ${formatNumber(entry.quantity_available, quantityDecimals)}`,
                   }))}
                   value={allocationEntryId}
                   onChange={(value) => setAllocationEntryId(value)}
@@ -450,11 +450,11 @@ const StockDetailsPage: React.FC = () => {
                 />
 
                 <Select
-                  label="Type"
+                  label="类型"
                   data={[
-                    { value: 'sale', label: 'Sale' },
-                    { value: 'expired', label: 'Expired' },
-                    { value: 'other', label: 'Other' },
+                    { value: 'sale', label: '销售出库' },
+                    { value: 'expired', label: '过期损耗' },
+                    { value: 'other', label: '其他' },
                   ]}
                   value={allocationType}
                   onChange={(value) => {
@@ -470,8 +470,8 @@ const StockDetailsPage: React.FC = () => {
 
                 {allocationType === 'sale' ? (
                   <Select
-                    label="Sales Order Item"
-                    placeholder="Select sales order item"
+                    label="销售订单明细"
+                    placeholder="请选择销售订单明细"
                     data={salesAllocationOptions}
                     value={salesOrderItemId}
                     onChange={(value) => setSalesOrderItemId(value)}
@@ -482,7 +482,7 @@ const StockDetailsPage: React.FC = () => {
                 ) : null}
 
                 <NumberInput
-                  label="Quantity"
+                  label="数量"
                   value={allocationQuantity}
                   onChange={setAllocationQuantity}
                   min={0}
@@ -494,7 +494,7 @@ const StockDetailsPage: React.FC = () => {
                 />
 
                 <Textarea
-                  label="Notes"
+                  label="备注"
                   value={allocationNotes}
                   onChange={(event) => setAllocationNotes(event.currentTarget.value)}
                   minRows={3}
@@ -508,13 +508,13 @@ const StockDetailsPage: React.FC = () => {
                     onClick={resetAllocationModal}
                     disabled={createAllocationMutation.isPending}
                   >
-                    Cancel
+                    取消
                   </Button>
                   <Button
                     onClick={handleCreateAllocation}
                     loading={createAllocationMutation.isPending}
                   >
-                    Create Allocation
+                    创建分配
                   </Button>
                 </Group>
               </>

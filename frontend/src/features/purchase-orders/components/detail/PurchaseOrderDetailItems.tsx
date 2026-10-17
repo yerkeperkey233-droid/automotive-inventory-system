@@ -20,27 +20,27 @@ export const PurchaseOrderDetailItems: React.FC<PurchaseOrderDetailItemsProps> =
     if (item.product && typeof item.product === 'object' && 'name' in item.product) {
       return item.product.name;
     }
-    return item.product_name || 'Unknown product';
+    return item.product_name || '未知商品';
   };
 
   return (
     <Stack gap="lg" style={{ width: '100%' }}>
       <Text fw={600} size="lg">
-        Order Items
+        订单明细
       </Text>
       <Paper p="lg" radius="md" withBorder style={{ width: '100%', overflowX: 'auto' }}>
         {items.length === 0 ? (
-          <Text c="dimmed">No items in this order</Text>
+          <Text c="dimmed">该订单暂无明细</Text>
         ) : (
           <Table striped style={{ width: '100%', minWidth: 600 }}>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th style={{ width: '32%', textAlign: 'left' }}>Product</Table.Th>
-                <Table.Th style={{ width: '16%', textAlign: 'center' }}>Quantity</Table.Th>
-                <Table.Th style={{ width: '16%', textAlign: 'center' }}>Unit Cost</Table.Th>
-                <Table.Th style={{ width: '18%', textAlign: 'right' }}>Subtotal</Table.Th>
+                <Table.Th style={{ width: '32%', textAlign: 'left' }}>商品</Table.Th>
+                <Table.Th style={{ width: '16%', textAlign: 'center' }}>数量</Table.Th>
+                <Table.Th style={{ width: '16%', textAlign: 'center' }}>单位成本</Table.Th>
+                <Table.Th style={{ width: '18%', textAlign: 'right' }}>小计</Table.Th>
                 {shouldLinkToStock ? (
-                  <Table.Th style={{ width: '18%', textAlign: 'center' }}>View Stock</Table.Th>
+                  <Table.Th style={{ width: '18%', textAlign: 'center' }}>查看库存</Table.Th>
                 ) : null}
               </Table.Tr>
             </Table.Thead>
@@ -60,7 +60,7 @@ export const PurchaseOrderDetailItems: React.FC<PurchaseOrderDetailItemsProps> =
                         to={ROUTES.stockDetail(item.product.id)}
                         onClick={(event) => event.stopPropagation()}
                       >
-                        View Stock
+                        查看库存
                       </Anchor>
                     </Table.Td>
                   ) : null}
@@ -70,7 +70,7 @@ export const PurchaseOrderDetailItems: React.FC<PurchaseOrderDetailItemsProps> =
             <Table.Tfoot>
               <Table.Tr>
                 <Table.Td colSpan={shouldLinkToStock ? 4 : 3} style={{ textAlign: 'right', fontWeight: 600 }}>
-                  Total:
+                  合计：
                 </Table.Td>
                 <Table.Td style={{ textAlign: 'right', fontWeight: 700, fontSize: 16 }}>
                   {formatCurrency(totalCost)}

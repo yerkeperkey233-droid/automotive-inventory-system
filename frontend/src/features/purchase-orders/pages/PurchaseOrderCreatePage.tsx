@@ -52,13 +52,13 @@ const PurchaseOrderCreatePage: React.FC = () => {
   const handleSubmit = async () => {
     // Validation
     if (!formData.order_number.trim()) {
-      alert('Order number is required');
+      alert('请输入订单编号');
       return;
     }
 
     const validItems = items.filter((item) => item.product && item.quantity > 0);
     if (validItems.length === 0) {
-      alert('At least one item is required');
+      alert('请至少添加一条明细');
       return;
     }
 
@@ -86,7 +86,7 @@ const PurchaseOrderCreatePage: React.FC = () => {
   return (
     <Container size="lg" py="xl">
       <Stack gap="lg">
-        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700 }}>Create Purchase Order</h1>
+        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700 }}>创建采购订单</h1>
 
         <Paper p="lg" radius="md" withBorder>
           {errorMessage && (
@@ -118,13 +118,13 @@ const PurchaseOrderCreatePage: React.FC = () => {
                 onClick={() => navigate('/purchase-orders')}
                 disabled={createMutation.isPending}
               >
-                Cancel
+                取消
               </Button>
               <Button
                 onClick={handleSubmit}
                 loading={createMutation.isPending}
               >
-                Create Order
+                创建订单
               </Button>
             </Group>
           </Stack>

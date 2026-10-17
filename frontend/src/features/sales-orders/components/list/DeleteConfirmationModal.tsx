@@ -15,15 +15,15 @@ export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = (
   isLoading = false,
 }) => {
   return (
-    <Modal opened={opened} onClose={onClose} title="Delete Sales Order" centered>
+    <Modal opened={opened} onClose={onClose} title="删除销售订单" centered>
       <Stack>
-        <Text>Are you sure you want to delete this sales order? This action cannot be undone.</Text>
+        <Text>确定删除该销售订单吗？此操作无法撤销。</Text>
         <Group justify="flex-end">
           <Button variant="light" onClick={onClose}>
-            Cancel
+            取消
           </Button>
           <Button color="red" loading={isLoading} onClick={onConfirm}>
-            Delete
+            删除
           </Button>
         </Group>
       </Stack>

@@ -1,4 +1,40 @@
-.DS_*
-.github/*
-.vscode/*
+# Local settings and secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Dependencies and build output
+node_modules/
+venv/
+.venv/
+dist/
+build/
 backend/frontend_dist/
+staticfiles/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Local databases, uploads and logs
+*.sqlite3
+*.sqlite3-journal
+*.db
+*.log
+media/
+
+# Editor, OS and test caches
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+.pytest_cache/
+.mypy_cache/
+.vite/
+.coverage
+htmlcov/
+coverage/

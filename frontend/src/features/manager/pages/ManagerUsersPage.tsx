@@ -19,11 +19,11 @@ const ManagerUsersPage: React.FC = () => {
   const [deleteModal, setDeleteModal] = React.useState<ManagedUser | null>(null);
 
   if (usersQuery.isLoading) {
-    return <LoadingState message="Loading users..." />;
+    return <LoadingState message="正在加载用户列表…" />;
   }
 
   if (usersQuery.isError) {
-    return <ErrorState message="Failed to load users" onRetry={() => usersQuery.refetch()} />;
+    return <ErrorState message="加载用户列表失败" onRetry={() => usersQuery.refetch()} />;
   }
 
   const users = usersQuery.data?.results ?? [];
@@ -51,9 +51,9 @@ const ManagerUsersPage: React.FC = () => {
       >
         {users.length === 0 ? (
           <EmptyState
-            title="No Users"
-            description="Create the first user managed from this page."
-            actionLabel="Create User"
+            title="暂无用户"
+            description="请在此页面创建用户。"
+            actionLabel="创建用户"
             onAction={() => navigate(ROUTES.managerUserNew)}
           />
         ) : (
@@ -68,26 +68,25 @@ const ManagerUsersPage: React.FC = () => {
       <Modal
         opened={!!deleteModal}
         onClose={() => setDeleteModal(null)}
-        title="Delete User"
+        title="删除用户"
         centered
       >
         <Stack>
           <Text>
-            Are you sure you want to delete{' '}
-            <strong>{deleteModal?.username}</strong>? This action cannot be
-            undone.
+            确定删除用户{' '}
+            <strong>{deleteModal?.username}</strong> 吗？此操作无法撤销。
           </Text>
           {deleteErrorMessage ? <Text c="red" size="sm">{deleteErrorMessage}</Text> : null}
           <Group justify="flex-end">
             <Button variant="light" onClick={() => setDeleteModal(null)}>
-              Cancel
+              取消
             </Button>
             <Button
               color="red"
               loading={deleteMutation.isPending}
               onClick={handleDeleteConfirm}
             >
-              Delete
+              删除
             </Button>
           </Group>
         </Stack>

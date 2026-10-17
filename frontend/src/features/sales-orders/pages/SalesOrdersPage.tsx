@@ -42,16 +42,16 @@ const SalesOrdersPage: React.FC = () => {
       await deleteMutation.mutateAsync(deleteModal.orderId);
       setDeleteModal({ isOpen: false, orderId: null });
     } catch (error) {
-      console.error('Delete failed:', error);
+      console.error('删除失败：', error);
     }
   };
 
   if (query.isLoading) {
-    return <LoadingState message="Loading sales orders..." />;
+    return <LoadingState message="正在加载销售订单列表…" />;
   }
 
   if (query.isError) {
-    return <ErrorState message="Failed to load sales orders" onRetry={() => query.refetch()} />;
+    return <ErrorState message="加载销售订单列表失败" onRetry={() => query.refetch()} />;
   }
 
   const orders = query.data?.results || [];
@@ -61,10 +61,10 @@ const SalesOrdersPage: React.FC = () => {
       contentWidth="92%"
       header={
         <ListPageHeader
-          title="Sales Orders"
+          title="销售订单"
           itemCount={orders.length}
           itemLabel="order"
-          actionLabel="New Order"
+          actionLabel="新增订单"
           onAction={() => navigate('/sales-orders/new')}
         />
       }
@@ -84,13 +84,13 @@ const SalesOrdersPage: React.FC = () => {
     >
       {orders.length === 0 && !search ? (
         <EmptyState
-          title="No Sales Orders"
-          description="Start by creating your first sales order"
-          actionLabel="Create Order"
+          title="暂无销售订单"
+          description="请先创建销售订单"
+          actionLabel="创建订单"
           onAction={() => navigate('/sales-orders/new')}
         />
       ) : orders.length === 0 ? (
-        <EmptyState title="No Results" description={`No sales orders found matching "${search}"`} />
+        <EmptyState title="没有匹配结果" description={`未找到与“${search}”匹配的销售订单`} />
       ) : (
         <ListTableCard>
           <SalesOrdersTable

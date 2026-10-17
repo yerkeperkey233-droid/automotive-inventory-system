@@ -32,19 +32,19 @@ const ProductsPage: React.FC = () => {
         await deleteMutation.mutateAsync(deleteModal.productId);
         setDeleteModal({ isOpen: false, productId: null });
       } catch (error) {
-        console.error('Delete failed:', error);
+        console.error('删除失败：', error);
       }
     }
   };
 
   if (query.isLoading) {
-    return <LoadingState message="Loading products..." />;
+    return <LoadingState message="正在加载商品列表…" />;
   }
 
   if (query.isError) {
     return (
       <ErrorState
-        message="Failed to load products"
+        message="加载商品列表失败"
         onRetry={() => query.refetch()}
       />
     );
@@ -74,15 +74,15 @@ const ProductsPage: React.FC = () => {
     >
       {products.length === 0 && !search ? (
         <EmptyState
-          title="No Products"
-          description="Start by creating your first product"
-          actionLabel="Create Product"
+          title="暂无商品"
+          description="请先创建商品"
+          actionLabel="创建商品"
           onAction={() => navigate(ROUTES.productNew)}
         />
       ) : products.length === 0 ? (
         <EmptyState
-          title="No Results"
-          description={`No products found matching "${search}"`}
+          title="没有匹配结果"
+          description={`未找到与“${search}”匹配的商品`}
         />
       ) : (
         <ProductTable
@@ -98,27 +98,26 @@ const ProductsPage: React.FC = () => {
       <Modal
         opened={deleteModal.isOpen}
         onClose={() => setDeleteModal({ isOpen: false, productId: null })}
-        title="Delete Product"
+        title="删除商品"
         centered
       >
         <Stack>
           <Text>
-            Are you sure you want to delete this product? This action cannot
-            be undone.
+            确定删除该商品吗？此操作无法撤销。
           </Text>
           <Group justify="flex-end">
             <Button
               variant="light"
               onClick={() => setDeleteModal({ isOpen: false, productId: null })}
             >
-              Cancel
+              取消
             </Button>
             <Button
               color="red"
               loading={deleteMutation.isPending}
               onClick={handleDeleteConfirm}
             >
-              Delete
+              删除
             </Button>
           </Group>
         </Stack>

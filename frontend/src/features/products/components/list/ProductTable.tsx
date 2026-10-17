@@ -3,6 +3,7 @@ import { ActionIcon, Badge, Group, Tooltip } from '@mantine/core';
 import { IconPencil, IconTrash } from '@tabler/icons-react';
 import { DataTable } from '@components/ui/DataTable';
 import { ListTableCard } from '@components/ui/ListTableCard';
+import { formatUnit } from '@shared/utils/formatting';
 import type { Product } from '../../product.types';
 
 interface ProductTableProps {
@@ -19,23 +20,23 @@ export const ProductTable: React.FC<ProductTableProps> = ({
   onDelete,
 }) => {
   const columns = [
-    { key: 'sku', label: 'SKU', width: '20%', align: 'center' as const },
-    { key: 'name', label: 'Name', width: '20%', align: 'center' as const },
+    { key: 'sku', label: '商品编码', width: '20%', align: 'center' as const },
+    { key: 'name', label: '名称', width: '20%', align: 'center' as const },
     {
       key: 'amount',
-      label: 'Amount',
+      label: '含量',
       width: '20%',
       align: 'center' as const,
-      render: (value: number, row: Product) => `${value} ${row.base_unit}`,
+      render: (value: number, row: Product) => `${value} ${formatUnit(row.base_unit)}`,
     },
     {
       key: 'is_active',
-      label: 'Status',
+      label: '状态',
       width: '20%',
       align: 'center' as const,
       render: (value: boolean) => (
         <Badge color={value ? 'green' : 'gray'} variant="light">
-          {value ? 'Active' : 'Inactive'}
+          {value ? '已启用' : '已停用'}
         </Badge>
       ),
     },
@@ -50,7 +51,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
         onRowClick={(row: Product) => onRowClick(row)}
         renderRowActions={(row: Product) => (
           <Group gap={4} wrap="nowrap" justify="center">
-            <Tooltip label="Edit product">
+            <Tooltip label="编辑商品">
               <ActionIcon
                 variant="subtle"
                 color="blue"
@@ -62,7 +63,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
                 <IconPencil size={16} />
               </ActionIcon>
             </Tooltip>
-            <Tooltip label="Delete product">
+            <Tooltip label="删除商品">
               <ActionIcon
                 variant="subtle"
                 color="red"

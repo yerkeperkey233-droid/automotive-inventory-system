@@ -12,10 +12,10 @@ export const ManagerUsersToolbar: React.FC<ManagerUsersToolbarProps> = ({
 }) => {
   return (
     <ListPageHeader
-      title="Manager"
+      title="用户管理"
       itemCount={userCount}
       itemLabel="user"
-      actionLabel="New User"
+      actionLabel="新增用户"
       onAction={onCreate}
     />
   );

@@ -53,7 +53,7 @@ export const PurchaseOrderReceiveModal: React.FC<PurchaseOrderReceiveModalProps>
     if (item.product && typeof item.product === 'object' && 'name' in item.product) {
       return item.product.name;
     }
-    return item.product_name || 'Unknown product';
+    return item.product_name || '未知商品';
   };
 
   const items = useMemo(() => order.items || [], [order.items]);
@@ -118,14 +118,14 @@ export const PurchaseOrderReceiveModal: React.FC<PurchaseOrderReceiveModalProps>
 
       if (Math.abs(totalReceived - Number(item.quantity)) > 0.0001) {
         setValidationError(
-          `Entries for ${getProductLabel(item)} must total ${formatNumber(item.quantity, 4)}.`
+          `${getProductLabel(item)} 的入库数量合计必须为 ${formatNumber(item.quantity, 4)}。`
         );
         return;
       }
 
       for (const entry of itemEntries) {
         if (entry.quantity_received <= 0) {
-          setValidationError(`All entry quantities for ${getProductLabel(item)} must be greater than zero.`);
+          setValidationError(`${getProductLabel(item)} 的所有入库数量必须大于 0。`);
           return;
         }
 
@@ -142,10 +142,10 @@ export const PurchaseOrderReceiveModal: React.FC<PurchaseOrderReceiveModalProps>
   };
 
   return (
-    <Modal opened={opened} onClose={onClose} title="Receive With Stock Entries" centered size="xl">
+    <Modal opened={opened} onClose={onClose} title="登记入库并完成收货" centered size="xl">
       <Stack gap="md">
         <Alert icon={<IconAlertCircle size={16} />} c="blue">
-          Split each purchase-order item into one or more stock entries. Each entry can have its own expiration date.
+          每条采购明细可拆分为多条入库记录，并分别设置有效期。
         </Alert>
 
         {validationError ? (
@@ -155,7 +155,7 @@ export const PurchaseOrderReceiveModal: React.FC<PurchaseOrderReceiveModalProps>
         ) : null}
 
         {items.length === 0 ? (
-          <Text c="dimmed">This purchase order has no items to receive.</Text>
+          <Text c="dimmed">该采购订单没有可收货的明细。</Text>
         ) : (
           items.map((item) => {
             const itemEntries = entriesByItem[item.id] || [];
@@ -168,21 +168,21 @@ export const PurchaseOrderReceiveModal: React.FC<PurchaseOrderReceiveModalProps>
                     <div>
                       <Text fw={600}>{getProductLabel(item)}</Text>
                       <Text size="sm" c="dimmed">
-                        Required quantity: {formatNumber(item.quantity, 4)} at {formatNumber(item.unit_cost, 2)} unit cost
+                        需求数量： {formatNumber(item.quantity, 4)} ， {formatNumber(item.unit_cost, 2)} 单位成本
                       </Text>
                     </div>
                     <Text size="sm" c={Math.abs(totalReceived - Number(item.quantity)) > 0.0001 ? 'red' : 'green'}>
-                      Planned: {formatNumber(totalReceived, 4)}
+                      计划入库： {formatNumber(totalReceived, 4)}
                     </Text>
                   </Group>
 
                   <Table striped>
                     <Table.Thead>
                       <Table.Tr>
-                        <Table.Th>Quantity</Table.Th>
-                        <Table.Th>Expiration Date</Table.Th>
-                        <Table.Th>Preview</Table.Th>
-                        <Table.Th style={{ width: 60 }}>Action</Table.Th>
+                        <Table.Th>数量</Table.Th>
+                        <Table.Th>有效期截止日期</Table.Th>
+                        <Table.Th>预览</Table.Th>
+                        <Table.Th style={{ width: 60 }}>操作</Table.Th>
                       </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
@@ -202,7 +202,7 @@ export const PurchaseOrderReceiveModal: React.FC<PurchaseOrderReceiveModalProps>
                           </Table.Td>
                           <Table.Td style={{ minWidth: 220 }}>
                             <DateInput
-                              placeholder="Optional expiration date"
+                              placeholder="请选择有效期截止日期（选填）"
                               value={entry.expiration_date ? new Date(entry.expiration_date) : null}
                               onChange={(date) =>
                                 handleEntryChange(
@@ -217,7 +217,7 @@ export const PurchaseOrderReceiveModal: React.FC<PurchaseOrderReceiveModalProps>
                             />
                           </Table.Td>
                           <Table.Td>
-                            {entry.expiration_date ? formatDate(entry.expiration_date) : 'No expiry'}
+                            {entry.expiration_date ? formatDate(entry.expiration_date) : '未设置有效期'}
                           </Table.Td>
                           <Table.Td>
                             <ActionIcon
@@ -236,7 +236,7 @@ export const PurchaseOrderReceiveModal: React.FC<PurchaseOrderReceiveModalProps>
 
                   <Group justify="space-between">
                     <Text size="xs" c="dimmed">
-                      Received on this action: {formatDate(new Date().toISOString())}
+                      本次收货数量： {formatDate(new Date().toISOString())}
                     </Text>
                     <Button
                       leftSection={<IconPlus size={16} />}
@@ -244,7 +244,7 @@ export const PurchaseOrderReceiveModal: React.FC<PurchaseOrderReceiveModalProps>
                       onClick={() => handleAddEntry(item.id)}
                       disabled={isLoading}
                     >
-                      Add Entry
+                      添加入库记录
                     </Button>
                   </Group>
                 </Stack>
@@ -255,10 +255,10 @@ export const PurchaseOrderReceiveModal: React.FC<PurchaseOrderReceiveModalProps>
 
         <Group justify="flex-end">
           <Button variant="light" onClick={onClose} disabled={isLoading}>
-            Cancel
+            取消
           </Button>
           <Button onClick={handleSubmit} loading={isLoading}>
-            Receive Order
+            订单收货
           </Button>
         </Group>
       </Stack>

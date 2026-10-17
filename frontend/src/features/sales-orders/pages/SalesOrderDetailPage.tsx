@@ -54,7 +54,7 @@ const SalesOrderDetailPage: React.FC = () => {
       await deleteMutation.mutateAsync(orderId);
       navigate('/sales-orders');
     } catch (error) {
-      console.error('Delete failed:', error);
+      console.error('删除失败：', error);
     }
   };
 
@@ -74,7 +74,7 @@ const SalesOrderDetailPage: React.FC = () => {
       const message =
         error?.response?.data?.detail ||
         error?.response?.data?.error ||
-        'Failed to confirm order';
+        '确认订单失败';
       setErrorAlert({ isOpen: true, message });
     }
   };
@@ -91,7 +91,7 @@ const SalesOrderDetailPage: React.FC = () => {
       const message =
         error?.response?.data?.detail ||
         error?.response?.data?.error ||
-        'Failed to cancel order';
+        '取消订单失败';
       setErrorAlert({ isOpen: true, message });
     }
   };
@@ -107,7 +107,7 @@ const SalesOrderDetailPage: React.FC = () => {
       if (errorData?.requires_confirmation) {
         const count = errorData.allocation_count || 0;
         setReopenMessage(
-          `This sales order still has ${count} stock allocation${count === 1 ? '' : 's'}. Reopening it will delete them. Do you want to continue?`
+          `该销售订单关联 ${count} 条库存分配记录，重新打开订单将删除这些记录。确定继续吗？`
         );
         setShowReopenModal(true);
         return;
@@ -115,17 +115,17 @@ const SalesOrderDetailPage: React.FC = () => {
       const message =
         errorData?.detail ||
         errorData?.error ||
-        'Failed to reopen order';
+        '重新打开订单失败';
       setErrorAlert({ isOpen: true, message });
     }
   };
 
   if (query.isLoading) {
-    return <LoadingState message="Loading sales order..." />;
+    return <LoadingState message="正在加载销售订单…" />;
   }
 
   if (query.isError || !query.data) {
-    return <ErrorState message="Failed to load sales order" onRetry={() => query.refetch()} />;
+    return <ErrorState message="加载销售订单失败" onRetry={() => query.refetch()} />;
   }
 
   const order = query.data;
@@ -150,7 +150,7 @@ const SalesOrderDetailPage: React.FC = () => {
 
         <Group justify="flex-end">
           <Button variant="light" onClick={() => navigate('/sales-orders')}>
-            Back
+            返回
           </Button>
         </Group>
 
@@ -170,17 +170,17 @@ const SalesOrderDetailPage: React.FC = () => {
         <Modal
           opened={showReopenModal}
           onClose={() => setShowReopenModal(false)}
-          title="Reopen Sales Order"
+          title="重新打开销售订单"
           centered
         >
           <Stack>
             <Text>{reopenMessage}</Text>
             <Group justify="flex-end">
               <Button variant="light" onClick={() => setShowReopenModal(false)}>
-                Cancel
+                取消
               </Button>
               <Button loading={reopenMutation.isPending} color="orange" onClick={() => handleReopenOrder(true)}>
-                Reopen And Delete Allocations
+                重新打开并删除分配记录
               </Button>
             </Group>
           </Stack>

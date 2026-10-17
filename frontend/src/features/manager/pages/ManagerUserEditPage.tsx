@@ -27,10 +27,10 @@ const ManagerUserEditPage: React.FC = () => {
       is_active: true,
     },
     validate: {
-      email: (value) => (value.trim().length === 0 ? 'Email is required' : null),
-      username: (value) => (value.trim().length === 0 ? 'Username is required' : null),
+      email: (value) => (value.trim().length === 0 ? '请输入邮箱' : null),
+      username: (value) => (value.trim().length === 0 ? '请输入用户名' : null),
       password: (value) =>
-        value.length > 0 && value.length < 8 ? 'Password must be at least 8 characters' : null,
+        value.length > 0 && value.length < 8 ? '密码至少需要 8 个字符' : null,
     },
   });
   const initializedRef = React.useRef(false);
@@ -74,25 +74,25 @@ const ManagerUserEditPage: React.FC = () => {
   };
 
   if (userQuery.isLoading) {
-    return <LoadingState message="Loading user..." />;
+    return <LoadingState message="正在加载用户…" />;
   }
 
   if (userQuery.isError || !userQuery.data) {
-    return <ErrorState message="Failed to load user" onRetry={() => userQuery.refetch()} />;
+    return <ErrorState message="加载用户失败" onRetry={() => userQuery.refetch()} />;
   }
 
   return (
     <Container size="md" py="xl">
       <Stack gap="lg">
         <ProductHeader
-          title="Edit User"
-          subtitle={`Update access for ${userQuery.data.username}.`}
+          title="编辑用户"
+          subtitle={`修改 ${userQuery.data.username} 的账号权限。`}
         />
         <ManagerUserForm
           form={form}
           errorMessage={updateMutation.error ? getErrorMessage(updateMutation.error) : null}
           isSubmitting={updateMutation.isPending}
-          submitLabel="Save Changes"
+          submitLabel="保存修改"
           onSubmit={handleSubmit}
           onCancel={() => navigate(ROUTES.managerUsers)}
         />

@@ -25,7 +25,7 @@ export const StockForm: React.FC<StockFormProps> = ({
   errorMessage,
   isSubmitting = false,
   submitLabel,
-  cancelLabel = 'Cancel',
+  cancelLabel = '取消',
   productOptions,
   isLoadingProducts = false,
   showSourceType = true,

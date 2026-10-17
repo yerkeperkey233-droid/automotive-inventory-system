@@ -21,7 +21,7 @@ class StockEntryAdmin(admin.ModelAdmin):
         ('Dates & Expiration', {
             'fields': ('received_at', 'expiration_date')
         }),
-        ('Notes', {
+        ('备注', {
             'fields': ('notes',),
             'classes': ('collapse',)
         }),

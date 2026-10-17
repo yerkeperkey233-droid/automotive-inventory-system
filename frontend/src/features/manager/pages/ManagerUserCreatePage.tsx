@@ -22,9 +22,9 @@ const ManagerUserCreatePage: React.FC = () => {
       is_active: true,
     },
     validate: {
-      email: (value) => (value.trim().length === 0 ? 'Email is required' : null),
-      username: (value) => (value.trim().length === 0 ? 'Username is required' : null),
-      password: (value) => (value.length < 8 ? 'Password must be at least 8 characters' : null),
+      email: (value) => (value.trim().length === 0 ? '请输入邮箱' : null),
+      username: (value) => (value.trim().length === 0 ? '请输入用户名' : null),
+      password: (value) => (value.length < 8 ? '密码至少需要 8 个字符' : null),
     },
   });
 
@@ -37,14 +37,14 @@ const ManagerUserCreatePage: React.FC = () => {
     <Container size="md" py="xl">
       <Stack gap="lg">
         <ProductHeader
-          title="Create User"
-          subtitle="Only superusers can create and manage application users."
+          title="创建用户"
+          subtitle="只有超级管理员可以创建和管理用户。"
         />
         <ManagerUserForm
           form={form}
           errorMessage={createMutation.error ? getErrorMessage(createMutation.error) : null}
           isSubmitting={createMutation.isPending}
-          submitLabel="Create User"
+          submitLabel="创建用户"
           onSubmit={handleSubmit}
           onCancel={() => navigate(ROUTES.managerUsers)}
         />

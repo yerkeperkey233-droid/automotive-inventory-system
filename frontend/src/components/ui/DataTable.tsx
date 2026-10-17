@@ -146,7 +146,7 @@ export const DataTable = React.forwardRef<HTMLTableElement, DataTableProps<any>>
                       ...(actionsColumnWidth ? { width: actionsColumnWidth } : undefined),
                     }}
                   >
-                    Actions
+                    操作
                   </Table.Th>
                 )}
               </Table.Tr>

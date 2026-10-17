@@ -20,27 +20,27 @@ export const StockTable: React.FC<StockTableProps> = ({
   onDelete,
 }) => {
   const columns = [
-    { key: 'id', label: 'Entry #', width: '12%', align: 'center' as const },
-    { key: 'product_name', label: 'Product', width: '20%', align: 'center' as const },
+    { key: 'id', label: '入库编号', width: '12%', align: 'center' as const },
+    { key: 'product_name', label: '商品', width: '20%', align: 'center' as const },
     {
       key: 'quantity_available',
-      label: 'Available',
+      label: '可用数量',
       width: '15%',
       align: 'center' as const,
       render: (value: number) => <strong>{value}</strong>,
     },
     {
       key: 'quantity_received',
-      label: 'Received',
+      label: '已收货',
       width: '12%',
       align: 'center' as const,
     },
     {
       key: 'expiration_date',
-      label: 'Expires',
+      label: '到期日期',
       width: '33%',
       align: 'center' as const,
-      render: (value: string) => (value ? formatDate(value) : 'N/A'),
+      render: (value: string) => (value ? formatDate(value) : '暂无'),
     },
   ];
 
@@ -53,7 +53,7 @@ export const StockTable: React.FC<StockTableProps> = ({
         onRowClick={(row: StockEntry) => onRowClick(row)}
         renderRowActions={(row: StockEntry) => (
           <Group gap={4} wrap="nowrap" justify="center">
-            <Tooltip label="Edit stock entry">
+            <Tooltip label="编辑入库记录">
               <ActionIcon
                 variant="subtle"
                 color="blue"
@@ -65,7 +65,7 @@ export const StockTable: React.FC<StockTableProps> = ({
                 <IconPencil size={16} />
               </ActionIcon>
             </Tooltip>
-            <Tooltip label="Delete stock entry">
+            <Tooltip label="删除入库记录">
               <ActionIcon
                 variant="subtle"
                 color="red"

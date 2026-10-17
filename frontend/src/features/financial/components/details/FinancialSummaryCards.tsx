@@ -18,7 +18,7 @@ interface FinancialSummaryCardsProps {
 const formatMetricValue = (
   value: number | string | null | undefined,
   formatter: (value: number | string | null | undefined) => string,
-  fallback = 'N/A'
+  fallback = '暂无'
 ) => {
   if (value === null || value === undefined) {
     return fallback;
@@ -67,25 +67,25 @@ export const FinancialSummaryCards: React.FC<FinancialSummaryCardsProps> = ({
 
   const cards = [
     {
-      label: 'Revenue',
+      label: '收入',
       value: formatMetricValue(summary.total_revenue, formatCurrency),
       color: 'teal.7',
       borderColor: 'var(--mantine-color-teal-2)',
     },
     {
-      label: 'Purchase Cost',
+      label: '采购成本',
       value: formatMetricValue(summary.total_purchase_cost, formatCurrency),
       color: undefined,
       borderColor: undefined,
     },
     {
-      label: 'COGS',
+      label: '销售成本',
       value: formatMetricValue(summary.total_cogs, formatCurrency),
       color: undefined,
       borderColor: undefined,
     },
     {
-      label: 'Profit',
+      label: '利润',
       value: formatMetricValue(summary.profit, formatCurrency),
       color: toSafeNumber(summary.profit) >= 0 ? 'green.7' : 'red.7',
       borderColor:
@@ -94,7 +94,7 @@ export const FinancialSummaryCards: React.FC<FinancialSummaryCardsProps> = ({
           : 'var(--mantine-color-red-2)',
     },
     {
-      label: 'Margin',
+      label: '利润率',
       value: formatMetricValue(summary.profit_margin, formatPercentage),
       color: toSafeNumber(summary.profit_margin) >= 0 ? 'green.7' : 'red.7',
       borderColor:
@@ -103,19 +103,19 @@ export const FinancialSummaryCards: React.FC<FinancialSummaryCardsProps> = ({
           : 'var(--mantine-color-red-2)',
     },
     {
-      label: 'Qty Purchased',
+      label: '采购数量',
       value: formatMetricValue(summary.quantity_purchased, (value) => formatNumber(value, 4)),
       color: undefined,
       borderColor: undefined,
     },
     {
-      label: 'Qty Sold',
+      label: '销售数量',
       value: formatMetricValue(summary.quantity_sold, (value) => formatNumber(value, 4)),
       color: undefined,
       borderColor: undefined,
     },
     {
-      label: 'Balance',
+      label: '余额',
       value: formatCurrency(balance),
       color: getSignedMetricColor(balance),
       borderColor: getSignedMetricBorderColor(balance),
@@ -150,7 +150,7 @@ export const FinancialSummaryCards: React.FC<FinancialSummaryCardsProps> = ({
           ) : null}
           {isRefreshing ? (
             <Text size="xs" c="dimmed">
-              Refreshing selection summary...
+              正在更新已选项目汇总…
             </Text>
           ) : null}
         </Stack>

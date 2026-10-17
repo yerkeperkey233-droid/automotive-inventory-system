@@ -24,7 +24,7 @@ class PurchaseOrderWriteItemSerializer(serializers.ModelSerializer):
     def validate_product(self, value):
         request = self.context.get('request')
         if request and value.user_id != request.user.id:
-            raise serializers.ValidationError('You can only use products that belong to your account.')
+            raise serializers.ValidationError('只能使用属于当前账号的商品。')
         return value
 
 
@@ -68,7 +68,7 @@ class PurchaseOrderCreateUpdateSerializer(serializers.ModelSerializer):
         instance = self.instance
         if instance and instance.status == 'received' and 'items' in self.initial_data:
             raise serializers.ValidationError({
-                'items': 'Items cannot be changed once a purchase order is received.'
+                'items': '采购订单收货后不能修改明细。'
             })
         return attrs
     

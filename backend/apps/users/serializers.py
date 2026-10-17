@@ -27,7 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if self.instance is None and not attrs.get('password'):
-            raise serializers.ValidationError({'password': 'This field is required.'})
+            raise serializers.ValidationError({'password': '此字段不能为空。'})
         return attrs
 
     def create(self, validated_data):

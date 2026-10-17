@@ -37,33 +37,33 @@ const DashboardPage: React.FC = () => {
     salesOrdersQuery.isLoading;
 
   if (isLoading) {
-    return <LoadingState message="Loading dashboard..." />;
+    return <LoadingState message="正在加载工作台…" />;
   }
 
   const stats = [
     {
-      title: 'Products',
+      title: '商品管理',
       count: productsQuery.data?.count || 0,
       icon: IconPackage,
       color: 'blue',
       action: () => navigate(ROUTES.products),
     },
     {
-      title: 'Stocks',
+      title: '库存管理',
       count: stockedProductsCount,
       icon: IconShoppingCart,
       color: 'green',
       action: () => navigate(ROUTES.stocks),
     },
     {
-      title: 'Purchase Orders',
+      title: '采购订单',
       count: purchaseOrdersQuery.data?.count || 0,
       icon: IconTrendingUp,
       color: 'orange',
       action: () => navigate(ROUTES.purchaseOrders),
     },
     {
-      title: 'Sales Orders',
+      title: '销售订单',
       count: salesOrdersQuery.data?.count || 0,
       icon: IconCash,
       color: 'red',
@@ -78,10 +78,10 @@ const DashboardPage: React.FC = () => {
         <Group justify="space-between">
           <Stack gap={0}>
             <Text size="xl" fw={700}>
-              Dashboard
+              工作台
             </Text>
             <Text size="sm" c="dimmed">
-              Welcome to your Inventory Management System
+              欢迎使用汽车零部件库存与追溯管理系统
             </Text>
           </Stack>
         </Group>
@@ -111,7 +111,7 @@ const DashboardPage: React.FC = () => {
                     variant="light"
                     onClick={stat.action}
                   >
-                    View
+                    查看
                   </Button>
                 </Group>
               </Paper>
@@ -122,35 +122,35 @@ const DashboardPage: React.FC = () => {
         {/* Quick Actions */}
         <Paper p="lg" radius="md" withBorder>
           <Stack gap="md">
-            <Text fw={600}>Quick Actions</Text>
+            <Text fw={600}>快捷操作</Text>
             <Group>
               <Button
                 leftSection={<IconPlus size={16} />}
                 onClick={() => navigate(ROUTES.productNew)}
                 variant="light"
               >
-                New Product
+                新增商品
               </Button>
               <Button
                 leftSection={<IconPlus size={16} />}
                 onClick={() => navigate(ROUTES.stockEntryNew)}
                 variant="light"
               >
-                Add Stock
+                新增库存
               </Button>
               <Button
                 leftSection={<IconPlus size={16} />}
                 onClick={() => navigate(ROUTES.purchaseOrderNew)}
                 variant="light"
               >
-                New Purchase Order
+                新增采购订单
               </Button>
               <Button
                 leftSection={<IconPlus size={16} />}
                 onClick={() => navigate(ROUTES.salesOrderNew)}
                 variant="light"
               >
-                New Sales Order
+                新增销售订单
               </Button>
             </Group>
           </Stack>
@@ -161,16 +161,16 @@ const DashboardPage: React.FC = () => {
           <Stack gap="md">
             <Group justify="space-between">
               <Stack gap={0}>
-                <Text fw={600}>Financial Overview</Text>
+                <Text fw={600}>财务概览</Text>
                 <Text size="sm" c="dimmed">
-                  View detailed financial metrics
+                  查看详细财务指标
                 </Text>
               </Stack>
               <Button
                 onClick={() => navigate(ROUTES.financial)}
                 variant="light"
               >
-                View Dashboard
+                查看财务分析
               </Button>
             </Group>
           </Stack>

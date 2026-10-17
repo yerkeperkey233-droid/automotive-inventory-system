@@ -25,9 +25,9 @@ const LoginForm: React.FC = () => {
     },
     validate: {
       username: (value) =>
-        value.length === 0 ? 'Username is required' : null,
+        value.length === 0 ? '请输入用户名' : null,
       password: (value) =>
-        value.length === 0 ? 'Password is required' : null,
+        value.length === 0 ? '请输入密码' : null,
     },
   });
 
@@ -56,15 +56,15 @@ const LoginForm: React.FC = () => {
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Stack gap="md">
             <TextInput
-              label="Username"
-              placeholder="Username123"
+              label="用户名"
+              placeholder="请输入用户名"
               {...form.getInputProps('username')}
               disabled={loginMutation.isPending}
             />
 
             <PasswordInput
-              label="Password"
-              placeholder="Enter your password"
+              label="密码"
+              placeholder="请输入密码"
               {...form.getInputProps('password')}
               disabled={loginMutation.isPending}
             />
@@ -74,7 +74,7 @@ const LoginForm: React.FC = () => {
               fullWidth
               loading={loginMutation.isPending}
             >
-              Sign In
+              登录
             </Button>
           </Stack>
         </form>

@@ -23,10 +23,10 @@ const Sidebar: React.FC = () => {
       <Box p="md">
         <Group gap="xs" mb="lg" align="center">
           <Text size="lg" fw={700} component="span">
-            IMS
+            库存管理
           </Text>
           <Badge size="sm" variant="light">
-            v1.0
+            版本 1.0
           </Badge>
         </Group>
 

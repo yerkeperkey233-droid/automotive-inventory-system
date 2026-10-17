@@ -49,7 +49,7 @@ class StockEntrySerializer(serializers.ModelSerializer):
 
         if instance and 'source_type' in attrs and attrs['source_type'] != instance.source_type:
             raise serializers.ValidationError({
-                'source_type': 'Changing the source type for an existing stock entry is not allowed.'
+                'source_type': '不能更改现有入库记录的来源类型。'
             })
 
         return attrs

@@ -19,15 +19,15 @@ interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { label: 'Dashboard', href: ROUTES.dashboard, icon: IconDashboard },
-  { label: 'Products', href: ROUTES.products, icon: IconPackage },
-  { label: 'Stocks', href: ROUTES.stocks, icon: IconPackages },
+  { label: '工作台', href: ROUTES.dashboard, icon: IconDashboard },
+  { label: '商品管理', href: ROUTES.products, icon: IconPackage },
+  { label: '库存管理', href: ROUTES.stocks, icon: IconPackages },
   {
-    label: 'Purchase Orders',
+    label: '采购订单',
     href: ROUTES.purchaseOrders,
     icon: IconShoppingCart,
   },
-  { label: 'Sales Orders', href: ROUTES.salesOrders, icon: IconTrendingUp },
-  { label: 'Financial', href: ROUTES.financial, icon: IconCurrencyDollar },
-  { label: 'Manager', href: ROUTES.managerUsers, icon: IconUsers, superuserOnly: true },
+  { label: '销售订单', href: ROUTES.salesOrders, icon: IconTrendingUp },
+  { label: '财务分析', href: ROUTES.financial, icon: IconCurrencyDollar },
+  { label: '用户管理', href: ROUTES.managerUsers, icon: IconUsers, superuserOnly: true },
 ];

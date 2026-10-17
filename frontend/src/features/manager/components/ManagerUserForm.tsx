@@ -52,15 +52,15 @@ export const ManagerUserForm: React.FC<ManagerUserFormProps> = ({
         <Stack gap="md">
           <Group grow align="flex-start">
             <TextInput
-              label="Username"
-              placeholder="Enter username"
+              label="用户名"
+              placeholder="请输入用户名"
               withAsterisk
               disabled={isSubmitting}
               {...form.getInputProps('username')}
             />
             <TextInput
-              label="Email"
-              placeholder="Enter email"
+              label="邮箱"
+              placeholder="请输入邮箱"
               withAsterisk
               disabled={isSubmitting}
               {...form.getInputProps('email')}
@@ -69,43 +69,43 @@ export const ManagerUserForm: React.FC<ManagerUserFormProps> = ({
 
           <Group grow align="flex-start">
             <TextInput
-              label="First name"
-              placeholder="Enter first name"
+              label="名"
+              placeholder="请输入名字"
               disabled={isSubmitting}
               {...form.getInputProps('first_name')}
             />
             <TextInput
-              label="Last name"
-              placeholder="Enter last name"
+              label="姓"
+              placeholder="请输入姓氏"
               disabled={isSubmitting}
               {...form.getInputProps('last_name')}
             />
           </Group>
 
           <PasswordInput
-            label="Password"
-            placeholder="Enter password"
+            label="密码"
+            placeholder="请输入密码"
             disabled={isSubmitting}
             {...form.getInputProps('password')}
           />
 
           <Switch
-            label="Active user"
-            description="Inactive users remain in the system but should not log in."
+            label="启用账号"
+            description="停用的账号仍保留在系统中，但无法登录。"
             disabled={isSubmitting}
             {...form.getInputProps('is_active', { type: 'checkbox' })}
           />
 
           <Checkbox
-            label="Grant superuser access"
-            description="Superusers can access the manager area and edit other users."
+            label="授予超级管理员权限"
+            description="超级管理员可访问用户管理页面并编辑其他用户。"
             disabled={isSubmitting}
             {...form.getInputProps('is_superuser', { type: 'checkbox' })}
           />
 
           <Group justify="flex-end" pt="xl">
             <Button type="button" variant="light" onClick={onCancel}>
-              Cancel
+              取消
             </Button>
             <Button type="submit" loading={isSubmitting}>
               {submitLabel}

@@ -24,30 +24,30 @@ export const ProductFormFields: React.FC<ProductFormFieldsProps> = ({
   return (
     <>
       <TextInput
-        label="SKU / Code"
+        label="商品编码"
         placeholder="PROD-001"
         {...form.getInputProps('sku')}
         disabled={disabled}
       />
 
       <TextInput
-        label="Product Name"
-        placeholder="Enter product name"
+        label="商品名称"
+        placeholder="请输入商品名称"
         {...form.getInputProps('name')}
         disabled={disabled}
       />
 
       <Textarea
-        label="Description"
-        placeholder="Enter product description"
+        label="描述"
+        placeholder="请输入商品描述"
         minRows={3}
         {...form.getInputProps('description')}
         disabled={disabled}
       />
 
       <Select
-        label="Unit of measure"
-        placeholder="Select unit"
+        label="计量单位"
+        placeholder="请选择单位"
         data={PRODUCT_UNITS}
         {...form.getInputProps('base_unit')}
         disabled={disabled}

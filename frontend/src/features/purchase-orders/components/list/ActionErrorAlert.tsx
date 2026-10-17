@@ -17,7 +17,7 @@ export const ActionErrorAlert: React.FC<ActionErrorAlertProps> = ({
     <Modal
       opened={opened}
       onClose={onClose}
-      title="Action Not Allowed"
+      title="无法执行该操作"
       centered
     >
       <Stack>
@@ -26,7 +26,7 @@ export const ActionErrorAlert: React.FC<ActionErrorAlertProps> = ({
         </Alert>
         <Group justify="flex-end">
           <Button color="blue" onClick={onClose}>
-            OK
+            确定
           </Button>
         </Group>
       </Stack>

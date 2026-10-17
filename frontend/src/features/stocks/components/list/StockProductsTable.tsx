@@ -15,11 +15,11 @@ export const StockProductsTable: React.FC<StockProductsTableProps> = ({
   onRowClick,
 }) => {
   const columns = [
-    { key: 'sku', label: 'SKU', width: '20%', align: 'center' as const },
-    { key: 'name', label: 'Product', width: '15%', align: 'center' as const },
+    { key: 'sku', label: '商品编码', width: '20%', align: 'center' as const },
+    { key: 'name', label: '商品', width: '15%', align: 'center' as const },
     {
       key: 'available_quantity',
-      label: 'In Stock',
+      label: '有库存',
       width: '20%',
       align: 'center' as const,
       render: (value: number | string, row: Product) => (
@@ -28,7 +28,7 @@ export const StockProductsTable: React.FC<StockProductsTableProps> = ({
     },
     {
       key: 'status',
-      label: 'Status',
+      label: '状态',
       width: '20%',
       align: 'center' as const,
       render: (_value: unknown, row: Product) => (
@@ -37,7 +37,7 @@ export const StockProductsTable: React.FC<StockProductsTableProps> = ({
     },
     {
       key: 'total_inventory_value',
-      label: 'Inventory Value',
+      label: '库存金额',
       width: '25%',
       align: 'center' as const,
       render: (value: number | string) => formatCurrency(value),

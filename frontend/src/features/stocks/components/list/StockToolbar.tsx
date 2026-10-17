@@ -12,10 +12,10 @@ export const StockToolbar: React.FC<StockToolbarProps> = ({
 }) => {
   return (
     <ListPageHeader
-      title="Stocks"
+      title="库存管理"
       itemCount={stockCount}
       itemLabel="product"
-      actionLabel="Add Stock Entry"
+      actionLabel="新增入库记录"
       onAction={onCreate}
     />
   );

@@ -42,19 +42,19 @@ const PurchaseOrdersPage: React.FC = () => {
         await deleteMutation.mutateAsync(deleteModal.orderId);
         setDeleteModal({ isOpen: false, orderId: null });
       } catch (error) {
-        console.error('Delete failed:', error);
+        console.error('删除失败：', error);
       }
     }
   };
 
   if (query.isLoading) {
-    return <LoadingState message="Loading purchase orders..." />;
+    return <LoadingState message="正在加载采购订单列表…" />;
   }
 
   if (query.isError) {
     return (
       <ErrorState
-        message="Failed to load purchase orders"
+        message="加载采购订单列表失败"
         onRetry={() => query.refetch()}
       />
     );
@@ -67,10 +67,10 @@ const PurchaseOrdersPage: React.FC = () => {
       contentWidth="92%"
       header={
         <ListPageHeader
-          title="Purchase Orders"
+          title="采购订单"
           itemCount={orders.length}
           itemLabel="order"
-          actionLabel="New Order"
+          actionLabel="新增订单"
           onAction={() => navigate('/purchase-orders/new')}
         />
       }
@@ -90,15 +90,15 @@ const PurchaseOrdersPage: React.FC = () => {
     >
       {orders.length === 0 && !search ? (
         <EmptyState
-          title="No Purchase Orders"
-          description="Start by creating your first purchase order"
-          actionLabel="Create Order"
+          title="暂无采购订单"
+          description="请先创建采购订单"
+          actionLabel="创建订单"
           onAction={() => navigate('/purchase-orders/new')}
         />
       ) : orders.length === 0 ? (
         <EmptyState
-          title="No Results"
-          description={`No purchase orders found matching "${search}"`}
+          title="没有匹配结果"
+          description={`未找到与“${search}”匹配的采购订单`}
         />
       ) : (
         <ListTableCard>

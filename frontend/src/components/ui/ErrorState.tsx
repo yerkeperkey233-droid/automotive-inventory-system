@@ -9,14 +9,14 @@ interface ErrorStateProps {
 }
 
 export const ErrorState: React.FC<ErrorStateProps> = ({
-  message = 'An error occurred while loading data',
+  message = '加载数据时发生错误',
   onRetry,
   fullHeight = true,
 }) => {
   return (
     <Center style={{ minHeight: fullHeight ? 300 : 'auto', flexDirection: 'column' }}>
       <Stack align="center" gap={16} style={{ maxWidth: 400 }}>
-        <Alert icon={<IconAlertCircle size={16} />} c="red" title="Error">
+        <Alert icon={<IconAlertCircle size={16} />} c="red" title="错误">
           {message}
         </Alert>
         {onRetry && (
@@ -25,7 +25,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
             onClick={onRetry}
             variant="light"
           >
-            Try Again
+            重试
           </Button>
         )}
       </Stack>

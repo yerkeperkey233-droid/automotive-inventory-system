@@ -20,7 +20,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   errorMessage,
   isSubmitting = false,
   submitLabel,
-  cancelLabel = "Cancel",
+  cancelLabel = "取消",
   onSubmit,
   onCancel,
 }) => {

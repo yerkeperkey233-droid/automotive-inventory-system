@@ -35,12 +35,12 @@ export const FinancialFilters: React.FC<FinancialFiltersProps> = ({
         leftSection={<IconSearch size={16} />}
         rightSection={
           searchInput ? (
-            <Tooltip label="Clear search">
+            <Tooltip label="清除搜索">
               <ActionIcon
                 variant="subtle"
                 color="gray"
                 onClick={onSearchClear}
-                aria-label="Clear search"
+                aria-label="清除搜索"
               >
                 <IconX size={16} />
               </ActionIcon>
@@ -58,26 +58,26 @@ export const FinancialFilters: React.FC<FinancialFiltersProps> = ({
         style={{ flex: 1, minWidth: 260 }}
       />
       <Button onClick={onSearchSubmit}>
-        Search
+        搜索
       </Button>
       <DateInput
-        label="Start date"
-        placeholder="Select start date"
+        label="开始日期"
+        placeholder="请选择开始日期"
         value={startDate}
         onChange={(value) => onStartDateChange(value ? new Date(value) : null)}
         clearable
         style={{ minWidth: 180 }}
       />
       <DateInput
-        label="End date"
-        placeholder="Select end date"
+        label="结束日期"
+        placeholder="请选择结束日期"
         value={endDate}
         onChange={(value) => onEndDateChange(value ? new Date(value) : null)}
         clearable
         style={{ minWidth: 180 }}
       />
       <Button variant="light" color="gray" onClick={onResetPeriod}>
-        Reset period
+        重置日期范围
       </Button>
     </Group>
   );

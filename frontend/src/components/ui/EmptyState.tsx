@@ -12,8 +12,8 @@ interface EmptyStateProps {
 }
 
 export const EmptyState: React.FC<EmptyStateProps> = ({
-  title = 'No data',
-  description = 'Nothing to show yet',
+  title = '暂无数据',
+  description = '暂无内容',
   icon = <IconFileOff size={48} color="gray" />,
   actionLabel,
   onAction,

@@ -94,7 +94,7 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
     }>;
     const responseData = axiosError.response?.data;
     if (!responseData) {
-      return 'Failed to update stock allocation.';
+      return '更新库存分配失败。';
     }
 
     if (typeof responseData.detail === 'string') {
@@ -114,7 +114,7 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
       return firstValue;
     }
 
-    return 'Failed to update stock allocation.';
+    return '更新库存分配失败。';
   };
 
   const handleSave = async () => {
@@ -126,17 +126,17 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
       typeof quantityAllocated === 'number' ? quantityAllocated : Number(quantityAllocated);
 
     if (!Number.isFinite(parsedQuantity) || parsedQuantity <= 0) {
-      setFormError('Quantity must be greater than zero.');
+      setFormError('数量必须大于 0。');
       return;
     }
 
     if (parsedQuantity - editableQuantityMax > 0.0001) {
-      setFormError(`Quantity cannot exceed ${formatNumber(editableQuantityMax, quantityDecimals)}.`);
+      setFormError(`数量不能超过 ${formatNumber(editableQuantityMax, quantityDecimals)}。`);
       return;
     }
 
     if (editingAllocation.sales_order_item && allocationType !== 'sale') {
-      setFormError('Sales-linked allocations must remain sale allocations.');
+      setFormError('关联销售订单的分配必须保持销售出库类型。');
       return;
     }
 
@@ -173,14 +173,14 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
   const columns = [
     {
       key: 'stock_entry',
-      label: 'Stock Entry',
+      label: '入库记录',
       width: '16%',
       align: 'center' as const,
-      render: (value: number) => entryMap.get(value)?.stock_identifier || `Entry #${value}`,
+      render: (value: number) => entryMap.get(value)?.stock_identifier || `入库记录 #${value}`,
     },
     {
       key: 'source',
-      label: 'Source',
+      label: '来源',
       width: '18%',
       align: 'center' as const,
       render: (_value: string | undefined, row: StockAllocation) => (
@@ -190,28 +190,28 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
           </Anchor>
         ) : (
           <Badge color={allocationTypeColors[row.type]} variant="light">
-            {row.type}
+            {{ sale: '销售出库', expired: '过期损耗', other: '其他' }[row.type]}
           </Badge>
         )
       ),
     },
     {
       key: 'quantity_allocated',
-      label: 'Quantity',
+      label: '数量',
       width: '16%',
       align: 'center' as const,
       render: (value: number | string) => <strong>{formatNumber(value, quantityDecimals)}</strong>,
     },
     {
       key: 'notes',
-      label: 'Notes',
+      label: '备注',
       width: '25%',
       align: 'center' as const,
-      render: (value: string | null | undefined) => value || 'N/A',
+      render: (value: string | null | undefined) => value || '暂无',
     },
     {
       key: 'created_at',
-      label: 'Created',
+      label: '创建时间',
       width: '25%',
       align: 'center' as const,
       render: (value: string) => formatDate(value),
@@ -224,17 +224,17 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
         <Group justify="space-between">
           <Stack gap={0}>
             <Text fw={700} size="lg">
-              Stock Allocations
+              库存分配
             </Text>
             {/* <Text size="sm" c="dimmed">
-              All stock usage linked to this product
+              该商品的全部库存使用记录
             </Text> */}
           </Stack>
-          <Badge variant="light">{allocations.length} allocations</Badge>
+          <Badge variant="light">{allocations.length} 条分配记录</Badge>
         </Group>
 
         {allocations.length === 0 ? (
-          <Text c="dimmed">No stock allocations found for this product.</Text>
+          <Text c="dimmed">该商品暂无库存分配记录。</Text>
         ) : (
           <DataTable
             columns={columns}
@@ -243,7 +243,7 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
             tableMinWidth={900}
             renderRowActions={(row: StockAllocation) => (
               <Group gap={4} wrap="nowrap" justify="center">
-                <Tooltip label="Edit stock allocation">
+                <Tooltip label="编辑库存分配">
                   <ActionIcon
                     variant="subtle"
                     color="blue"
@@ -252,7 +252,7 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
                     <IconPencil size={16} />
                   </ActionIcon>
                 </Tooltip>
-                <Tooltip label="Delete stock allocation">
+                <Tooltip label="删除库存分配">
                   <ActionIcon
                     variant="subtle"
                     color="red"
@@ -270,7 +270,7 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
       <Modal
         opened={!!editingAllocation}
         onClose={resetEditState}
-        title="Edit Stock Allocation"
+        title="编辑库存分配"
         centered
       >
         <Stack gap="md">
@@ -282,18 +282,18 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
 
           <Stack gap={4}>
             <Text size="sm" fw={500}>
-              Stock Entry
+              入库记录
             </Text>
             <Text size="sm" c="dimmed">
               {editingAllocation
                 ? entryMap.get(editingAllocation.stock_entry)?.stock_identifier ||
-                  `Entry #${editingAllocation.stock_entry}`
-                : 'N/A'}
+                  `入库记录 #${editingAllocation.stock_entry}`
+                : '暂无'}
             </Text>
           </Stack>
 
           <NumberInput
-            label="Quantity"
+            label="数量"
             value={quantityAllocated}
             onChange={setQuantityAllocated}
             min={0}
@@ -304,11 +304,11 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
           />
 
           <Select
-            label="Type"
+            label="类型"
             data={[
-              { value: 'sale', label: 'Sale' },
-              { value: 'expired', label: 'Expired' },
-              { value: 'other', label: 'Other' },
+              { value: 'sale', label: '销售出库' },
+              { value: 'expired', label: '过期损耗' },
+              { value: 'other', label: '其他' },
             ]}
             value={allocationType}
             onChange={(value) => {
@@ -321,12 +321,12 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
 
           {editingAllocation?.sales_order_item ? (
             <Text size="xs" c="dimmed">
-              Sales-linked allocations keep the `sale` type to preserve stock and profit tracking.
+              关联销售订单的分配必须保持销售出库类型，以确保库存和利润记录一致。
             </Text>
           ) : null}
 
           <Textarea
-            label="Notes"
+            label="备注"
             value={notes}
             onChange={(event) => setNotes(event.currentTarget.value)}
             minRows={3}
@@ -340,10 +340,10 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
               onClick={resetEditState}
               disabled={updateAllocationMutation.isPending}
             >
-              Cancel
+              取消
             </Button>
             <Button onClick={handleSave} loading={updateAllocationMutation.isPending}>
-              Save Changes
+              保存修改
             </Button>
           </Group>
         </Stack>
@@ -352,7 +352,7 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
       <Modal
         opened={!!deletingAllocation}
         onClose={resetDeleteState}
-        title="Delete Stock Allocation"
+        title="删除库存分配"
         centered
       >
         <Stack gap="md">
@@ -363,13 +363,13 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
           ) : null}
 
           <Text>
-            Are you sure you want to delete this stock allocation?
+            确定删除该库存分配吗？
           </Text>
 
           {deletingAllocation ? (
             <Text size="sm" c="dimmed">
               {entryMap.get(deletingAllocation.stock_entry)?.stock_identifier ||
-                `Entry #${deletingAllocation.stock_entry}`}:
+                `入库记录 #${deletingAllocation.stock_entry}`}:
               {' '}
               {formatNumber(deletingAllocation.quantity_allocated, quantityDecimals)}
             </Text>
@@ -381,14 +381,14 @@ export const StockAllocationsByProductCard: React.FC<StockAllocationsByProductCa
               onClick={resetDeleteState}
               disabled={deleteAllocationMutation.isPending}
             >
-              Cancel
+              取消
             </Button>
             <Button
               color="red"
               onClick={handleDelete}
               loading={deleteAllocationMutation.isPending}
             >
-              Delete
+              删除
             </Button>
           </Group>
         </Stack>

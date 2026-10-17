@@ -28,11 +28,11 @@ export const ProductInventoryCard: React.FC<ProductInventoryCardProps> = ({
     <Paper p="lg" radius="md" withBorder>
       <Stack gap="lg">
         <Text fw={700} size="lg">
-          Inventory
+          库存
         </Text>
 
         <Metric
-          label="Quantity in stock"
+          label="库存数量"
           value={formatNumber(product.available_quantity, 0)}
         />
       </Stack>

@@ -17,35 +17,35 @@ export const ManagerUsersTable: React.FC<ManagerUsersTableProps> = ({
   onDelete,
 }) => {
   const columns = [
-    { key: 'username', label: 'Username', width: '20%', align: 'center' as const },
-    { key: 'email', label: 'Email', width: '26%', align: 'center' as const },
+    { key: 'username', label: '用户名', width: '20%', align: 'center' as const },
+    { key: 'email', label: '邮箱', width: '26%', align: 'center' as const },
     {
       key: 'full_name',
-      label: 'Name',
+      label: '名称',
       width: '24%',
       align: 'center' as const,
       render: (_value: unknown, row: ManagedUser) =>
-        `${row.first_name || ''} ${row.last_name || ''}`.trim() || 'No name',
+        `${row.first_name || ''} ${row.last_name || ''}`.trim() || '未填写姓名',
     },
     {
       key: 'is_superuser',
-      label: 'Role',
+      label: '角色',
       width: '15%',
       align: 'center' as const,
       render: (value: boolean) => (
         <Badge color={value ? 'violet' : 'blue'} variant="light">
-          {value ? 'Superuser' : 'User'}
+          {value ? '超级管理员' : '普通用户'}
         </Badge>
       ),
     },
     {
       key: 'is_active',
-      label: 'Status',
+      label: '状态',
       width: '15%',
       align: 'center' as const,
       render: (value: boolean) => (
         <Badge color={value ? 'green' : 'gray'} variant="light">
-          {value ? 'Active' : 'Inactive'}
+          {value ? '已启用' : '已停用'}
         </Badge>
       ),
     },
@@ -59,7 +59,7 @@ export const ManagerUsersTable: React.FC<ManagerUsersTableProps> = ({
         actionsColumnWidth={100}
         renderRowActions={(row: ManagedUser) => (
           <Group gap={4} wrap="nowrap" justify="center">
-            <Tooltip label="Edit user">
+            <Tooltip label="编辑用户">
               <ActionIcon
                 variant="subtle"
                 color="blue"
@@ -71,7 +71,7 @@ export const ManagerUsersTable: React.FC<ManagerUsersTableProps> = ({
                 <IconPencil size={16} />
               </ActionIcon>
             </Tooltip>
-            <Tooltip label="Delete user">
+            <Tooltip label="删除用户">
               <ActionIcon
                 variant="subtle"
                 color="red"

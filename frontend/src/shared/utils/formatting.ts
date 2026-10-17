@@ -12,7 +12,7 @@ const toSafeNumber = (value: number | string | null | undefined): number => {
 };
 
 export const formatCurrency = (value: number | string | null | undefined): string => {
-  return new Intl.NumberFormat('en-US', {
+  return new Intl.NumberFormat('zh-CN', {
     style: 'currency',
     currency: 'USD',
   }).format(toSafeNumber(value));
@@ -29,7 +29,7 @@ export const formatNumber = (
 
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString('zh-CN', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -38,7 +38,7 @@ export const formatDate = (dateString: string): string => {
 
 export const formatDateTime = (dateString: string): string => {
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
+  return date.toLocaleDateString('zh-CN', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -57,3 +57,6 @@ export const formatPercentage = (
 export const parseCurrency = (value: string): number => {
   return parseFloat(value.replace(/[^\d.-]/g, ''));
 };
+
+export const formatUnit = (unit: string): string =>
+  ({ kg: '千克', g: '克', L: '升', mL: '毫升', unit: '件' } as Record<string, string>)[unit] ?? unit;

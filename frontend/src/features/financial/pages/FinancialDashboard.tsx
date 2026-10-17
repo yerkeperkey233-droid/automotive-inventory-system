@@ -22,16 +22,16 @@ import { FinancialPerspectiveTable } from '../components/list/FinancialPerspecti
 
 const perspectiveLabels: Record<FinancialPerspective, { title: string }> = {
   products: {
-    title: 'Products',
+    title: '商品管理',
   },
   'purchase-items': {
-    title: 'Purchase Items',
+    title: '采购明细',
   },
 };
 
 const searchPlaceholders: Record<FinancialPerspective, string> = {
-  products: 'Search products by name or SKU...',
-  'purchase-items': 'Search purchase items by order number, product, or SKU...',
+  products: '按商品名称或编码搜索…',
+  'purchase-items': '按订单编号、商品名称或编码搜索采购明细…',
 };
 
 const FinancialDashboard: React.FC = () => {
@@ -75,13 +75,13 @@ const FinancialDashboard: React.FC = () => {
   }, [perspective]);
 
   if (allItemsQuery.isLoading) {
-    return <LoadingState message="Loading financial data..." />;
+    return <LoadingState message="正在加载财务数据…" />;
   }
 
   if (allItemsQuery.isError || !allItemsQuery.data) {
     return (
       <ErrorState
-        message="Failed to load financial data"
+        message="加载财务数据失败"
         onRetry={() => allItemsQuery.refetch()}
       />
     );
@@ -116,7 +116,7 @@ const FinancialDashboard: React.FC = () => {
       <Container fluid px="xl" py="xl">
         <Stack gap="lg">
           <Text fw={700} size="2rem">
-            Financial Dashboard
+            财务分析
           </Text>
           <Paper withBorder radius="md" p={6}>
             <SegmentedControl
@@ -125,8 +125,8 @@ const FinancialDashboard: React.FC = () => {
               fullWidth
               color="blue"
               data={[
-                { label: 'Product', value: 'products' },
-                { label: 'Purchase Item', value: 'purchase-items' },
+                { label: '商品', value: 'products' },
+                { label: '采购明细', value: 'purchase-items' },
               ]}
             />
           </Paper>
@@ -150,8 +150,8 @@ const FinancialDashboard: React.FC = () => {
           />
           <EmptyState
             fullHeight={false}
-            title="No financial records found"
-            description="This perspective has no valid records yet. Received purchase orders will appear here once stock and sales activity exist."
+            title="暂无财务记录"
+            description="当前视图暂无有效记录。采购收货并产生库存及销售记录后，数据将显示在此处。"
           />
         </Stack>
       </Container>
@@ -160,10 +160,10 @@ const FinancialDashboard: React.FC = () => {
 
   const label = perspectiveLabels[perspective];
   const summaryTitle = hasSelection
-    ? `${label.title} Summary`
-    : `${label.title} Summary`;
+    ? `${label.title}汇总`
+    : `${label.title}汇总`;
   const summarySubtitle = hasSelection
-    ? `${selectedIds.length} selected`
+    ? `已选择 ${selectedIds.length} 项`
     : undefined;
 
   return (
@@ -171,7 +171,7 @@ const FinancialDashboard: React.FC = () => {
       <Stack gap="lg">
         <Stack gap={4}>
           <Text fw={700} size="2rem">
-            Financial Dashboard
+            财务分析
           </Text>
         </Stack>
 
@@ -182,8 +182,8 @@ const FinancialDashboard: React.FC = () => {
             fullWidth
             color="blue"
             data={[
-              { label: 'Product', value: 'products' },
-              { label: 'Purchase Item', value: 'purchase-items' },
+              { label: '商品', value: 'products' },
+              { label: '采购明细', value: 'purchase-items' },
             ]}
           />
         </Paper>

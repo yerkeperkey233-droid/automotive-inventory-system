@@ -22,24 +22,24 @@ export const PurchaseOrderForm: React.FC<PurchaseOrderFormProps> = ({
   return (
     <Stack gap="md">
       <TextInput
-        label="Order Number"
-        placeholder="e.g., PO-2024-001"
+        label="订单编号"
+        placeholder="例如：PO-2024-001"
         value={formData.order_number}
         onChange={(e) => onChange('order_number', e.currentTarget.value)}
         disabled={isLoading}
         required
       />
       <TextInput
-        label="Supplier Name"
-        placeholder="Enter supplier name"
+        label="供应商名称"
+        placeholder="请输入供应商名称"
         value={formData.supplier_name}
         onChange={(e) => onChange('supplier_name', e.currentTarget.value)}
         disabled={isLoading}
         required
       />
       <DateInput
-        label="Order Date"
-        placeholder="Pick order date"
+        label="订单日期"
+        placeholder="请选择订单日期"
         value={formData.ordered_at ? new Date(formData.ordered_at) : null}
         onChange={(date) => onChange('ordered_at', date ? date.toISOString().split('T')[0] : '')}
         disabled={isLoading}

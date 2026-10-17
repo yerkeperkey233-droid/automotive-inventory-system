@@ -45,17 +45,17 @@ export const PurchaseOrderItemsTable: React.FC<PurchaseOrderItemsTableProps> = (
   return (
     <Stack gap="md">
       <Text fw={600} size="lg">
-        Order Items
+        订单明细
       </Text>
       <Paper p="lg" radius="md" withBorder style={{ width: '100%', overflowX: 'auto' }}>
         <Table striped style={{ width: '100%', minWidth: 700 }}>
           <Table.Thead>
             <Table.Tr>
-              <Table.Th style={{ width: '35%' }}>Product</Table.Th>
-              <Table.Th style={{ width: '20%', textAlign: 'center' }}>Quantity</Table.Th>
-              <Table.Th style={{ width: '20%', textAlign: 'center' }}>Unit Cost</Table.Th>
-              <Table.Th style={{ width: '20%', textAlign: 'right' }}>Subtotal</Table.Th>
-              <Table.Th style={{ width: '5%', textAlign: 'center' }}>Action</Table.Th>
+              <Table.Th style={{ width: '35%' }}>商品</Table.Th>
+              <Table.Th style={{ width: '20%', textAlign: 'center' }}>数量</Table.Th>
+              <Table.Th style={{ width: '20%', textAlign: 'center' }}>单位成本</Table.Th>
+              <Table.Th style={{ width: '20%', textAlign: 'right' }}>小计</Table.Th>
+              <Table.Th style={{ width: '5%', textAlign: 'center' }}>操作</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
@@ -63,7 +63,7 @@ export const PurchaseOrderItemsTable: React.FC<PurchaseOrderItemsTableProps> = (
               <Table.Tr>
                 <Table.Td colSpan={5} style={{ textAlign: 'center', padding: '20px' }}>
                   <Text c="dimmed" size="sm">
-                    No items added yet. Click "Add Item" to add products.
+                    No items added yet. Click "添加明细" to add products.
                   </Text>
                 </Table.Td>
               </Table.Tr>
@@ -74,7 +74,7 @@ export const PurchaseOrderItemsTable: React.FC<PurchaseOrderItemsTableProps> = (
                   <Table.Tr key={index}>
                     <Table.Td>
                       <Select
-                        placeholder="Select product"
+                        placeholder="请选择商品"
                         data={productOptions}
                         value={item.product?.id?.toString() ?? null}
                         onChange={(value) => {
@@ -130,7 +130,7 @@ export const PurchaseOrderItemsTable: React.FC<PurchaseOrderItemsTableProps> = (
           <Table.Tfoot>
             <Table.Tr>
               <Table.Td colSpan={3} style={{ textAlign: 'right', fontWeight: 600 }}>
-                Total:
+                合计：
               </Table.Td>
               <Table.Td style={{ textAlign: 'right', fontWeight: 700, fontSize: 16 }}>
                 {formatCurrency(totalCost)}
@@ -146,7 +146,7 @@ export const PurchaseOrderItemsTable: React.FC<PurchaseOrderItemsTableProps> = (
         disabled={isLoading || isLocked}
         variant="default"
       >
-        Add Item
+        添加明细
       </Button>
     </Stack>
   );

@@ -30,13 +30,13 @@ const StockEditPage: React.FC = () => {
     },
     validate: {
       product: (value: string) =>
-        value.length === 0 ? 'Product is required' : null,
+        value.length === 0 ? '请选择商品' : null,
       quantity_received: (value: number) =>
-        value <= 0 ? 'Quantity must be greater than 0' : null,
+        value <= 0 ? '数量必须大于 0' : null,
       source_type: (value: string) =>
-        value.length === 0 ? 'Source type is required' : null,
+        value.length === 0 ? '请选择来源类型' : null,
       received_at: (value: string) =>
-        value.length === 0 ? 'Received date is required' : null,
+        value.length === 0 ? '请选择入库日期' : null,
     },
   });
 
@@ -72,13 +72,13 @@ const StockEditPage: React.FC = () => {
   };
 
   if (stockQuery.isLoading) {
-    return <LoadingState message="Loading stock entry..." />;
+    return <LoadingState message="正在加载入库记录…" />;
   }
 
   if (stockQuery.isError || !stockQuery.data) {
     return (
       <ErrorState
-        message="Failed to load stock entry"
+        message="加载入库记录失败"
         onRetry={() => stockQuery.refetch()}
       />
     );
@@ -94,14 +94,14 @@ const StockEditPage: React.FC = () => {
   return (
     <Container size="md" py="xl">
       <Stack gap="lg">
-        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700 }}>Edit Stock Entry</h1>
+        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700 }}>编辑入库记录</h1>
 
         <StockForm
           form={form}
           errorMessage={errorMessage}
           isSubmitting={updateMutation.isPending}
-          submitLabel="Save Changes"
-          cancelLabel="Cancel"
+          submitLabel="保存修改"
+          cancelLabel="取消"
           productOptions={productOptions}
           isLoadingProducts={productsQuery.isLoading}
           disableSourceType

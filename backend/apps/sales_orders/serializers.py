@@ -23,12 +23,12 @@ class StockAllocationSerializer(serializers.ModelSerializer):
 
         if instance and 'stock_entry' in attrs and attrs['stock_entry'] != instance.stock_entry:
             raise serializers.ValidationError({
-                'stock_entry': 'Changing the stock entry for an existing allocation is not allowed.'
+                'stock_entry': '不能更改现有分配关联的入库记录。'
             })
 
         if instance and 'sales_order_item' in attrs and attrs['sales_order_item'] != instance.sales_order_item:
             raise serializers.ValidationError({
-                'sales_order_item': 'Changing the sales order item for an existing allocation is not allowed.'
+                'sales_order_item': '不能更改现有分配关联的销售订单明细。'
             })
 
         stock_entry = attrs.get('stock_entry', instance.stock_entry if instance else None)
@@ -44,12 +44,12 @@ class StockAllocationSerializer(serializers.ModelSerializer):
 
         if user and stock_entry.user_id != user.id:
             raise serializers.ValidationError({
-                'stock_entry': 'You can only allocate stock entries that belong to your account.'
+                'stock_entry': '只能分配属于当前账号的库存。'
             })
 
         if sales_order_item and user and sales_order_item.sales_order.user_id != user.id:
             raise serializers.ValidationError({
-                'sales_order_item': 'You can only allocate to sales order items that belong to your account.'
+                'sales_order_item': '只能分配给属于当前账号的销售订单明细。'
             })
 
         current_quantity = instance.quantity_allocated if instance else 0
@@ -57,24 +57,24 @@ class StockAllocationSerializer(serializers.ModelSerializer):
         if quantity_allocated > available_for_update:
             raise serializers.ValidationError({
                 'quantity_allocated': (
-                    f'Cannot allocate more than {available_for_update} from this stock entry.'
+                    f'分配数量不能超过 {available_for_update}（当前入库记录）。'
                 )
             })
 
         if sales_order_item and allocation_type != 'sale':
             raise serializers.ValidationError({
-                'type': 'Allocations linked to a sales order item must remain sale allocations.'
+                'type': '关联销售订单的分配必须保持销售出库类型。'
             })
 
         if allocation_type == 'sale' and not sales_order_item:
             raise serializers.ValidationError({
-                'type': 'Sale allocations must be linked to a sales order item.'
+                'type': '销售出库分配必须关联销售订单明细。'
             })
 
         if sales_order_item:
             if stock_entry.product_id != sales_order_item.product_id:
                 raise serializers.ValidationError({
-                    'stock_entry': 'Stock entry product must match the sales order item product.'
+                    'stock_entry': '入库记录与销售订单明细必须对应同一商品。'
                 })
             sibling_allocations = sales_order_item.allocations.exclude(
                 pk=instance.pk if instance else None
@@ -85,7 +85,7 @@ class StockAllocationSerializer(serializers.ModelSerializer):
             if sibling_total + quantity_allocated > sales_order_item.quantity:
                 raise serializers.ValidationError({
                     'quantity_allocated': (
-                        f'Allocation exceeds the sales order item quantity of {sales_order_item.quantity}.'
+                        f'分配数量超过销售订单明细数量：{sales_order_item.quantity}.'
                     )
                 })
 
@@ -135,7 +135,7 @@ class SalesOrderWriteItemSerializer(serializers.ModelSerializer):
     def validate_product(self, value):
         request = self.context.get('request')
         if request and value.user_id != request.user.id:
-            raise serializers.ValidationError('You can only use products that belong to your account.')
+            raise serializers.ValidationError('只能使用属于当前账号的商品。')
         return value
 
 
@@ -199,7 +199,7 @@ class SalesOrderCreateUpdateSerializer(serializers.ModelSerializer):
         instance = self.instance
         if instance and instance.status == 'confirmed' and 'items' in self.initial_data:
             raise serializers.ValidationError({
-                'items': 'Items cannot be changed once a sales order is confirmed.'
+                'items': '销售订单确认后不能修改明细。'
             })
         return attrs
     

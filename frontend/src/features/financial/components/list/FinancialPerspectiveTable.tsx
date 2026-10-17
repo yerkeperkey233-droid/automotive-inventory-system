@@ -33,7 +33,7 @@ interface FinancialPerspectiveTableProps {
 
 const renderMetricCell = (value: number | string | null, type: 'currency' | 'number' | 'percentage') => {
   if (value === null) {
-    return 'N/A';
+    return '暂无';
   }
 
   if (type === 'currency') {
@@ -120,25 +120,25 @@ export const FinancialPerspectiveTable: React.FC<FinancialPerspectiveTableProps>
         <Group justify="space-between">
           <Stack gap={2}>
             <Text fw={700} size="lg">
-              Per-item breakdown
+              明细统计
             </Text>
             {/* <Text size="sm" c="dimmed">
-              Select multiple rows to refresh the summary cards with aggregated totals.
+              选择多行后，汇总卡片将显示所选项目的合计数据。
             </Text> */}
           </Stack>
 
           <Group gap="sm">
             {someSelected ? (
               <Text size="sm" c="dimmed">
-                {selectedIds.length} selected
+                {selectedIds.length} 项已选择
               </Text>
             ) : null}
             <Button variant="light" onClick={onToggleAll}>
-              {allSelected ? 'Clear visible' : 'Select all'}
+              {allSelected ? '取消当前列表选择' : '全选'}
             </Button>
             {someSelected ? (
               <Button variant="subtle" color="gray" onClick={onClearSelection}>
-                Reset selection
+                清空选择
               </Button>
             ) : null}
           </Group>
@@ -153,20 +153,20 @@ export const FinancialPerspectiveTable: React.FC<FinancialPerspectiveTableProps>
                     checked={allSelected}
                     indeterminate={!allSelected && someSelected}
                     onChange={onToggleAll}
-                    aria-label="Select all rows"
+                    aria-label="选择全部行"
                   />
                 </Table.Th>
-                <Table.Th>Item</Table.Th>
-                {perspective === 'purchase-items' ? <Table.Th>Unit Cost</Table.Th> : null}
-                {perspective === 'purchase-items' ? <Table.Th>Remaining Value</Table.Th> : null}
-                <Table.Th>Purchased Qty</Table.Th>
-                <Table.Th>Sold Qty</Table.Th>
-                <Table.Th>Balance</Table.Th>
-                <Table.Th>Purchase Cost</Table.Th>
-                <Table.Th>Revenue</Table.Th>
-                <Table.Th>COGS</Table.Th>
-                <Table.Th>Profit</Table.Th>
-                <Table.Th>Margin</Table.Th>
+                <Table.Th>明细</Table.Th>
+                {perspective === 'purchase-items' ? <Table.Th>单位成本</Table.Th> : null}
+                {perspective === 'purchase-items' ? <Table.Th>剩余库存金额</Table.Th> : null}
+                <Table.Th>采购数量</Table.Th>
+                <Table.Th>销售数量</Table.Th>
+                <Table.Th>余额</Table.Th>
+                <Table.Th>采购成本</Table.Th>
+                <Table.Th>收入</Table.Th>
+                <Table.Th>销售成本</Table.Th>
+                <Table.Th>利润</Table.Th>
+                <Table.Th>利润率</Table.Th>
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
@@ -183,7 +183,7 @@ export const FinancialPerspectiveTable: React.FC<FinancialPerspectiveTableProps>
                       <Checkbox
                         checked={isSelected}
                         onChange={() => onToggleItem(item.id)}
-                        aria-label={`Select ${item.name}`}
+                        aria-label={`选择 ${item.name}`}
                       />
                     </Table.Td>
                     <Table.Td>{renderPrimaryCell(perspective, item)}</Table.Td>

@@ -50,13 +50,13 @@ const StocksPage: React.FC = () => {
   }, [ordering, products]);
 
   if (query.isLoading) {
-    return <LoadingState message="Loading product stock..." />;
+    return <LoadingState message="正在加载商品库存…" />;
   }
 
   if (query.isError) {
     return (
       <ErrorState
-        message="Failed to load product stock"
+        message="加载商品库存失败"
         onRetry={() => query.refetch()}
       />
     );
@@ -86,15 +86,15 @@ const StocksPage: React.FC = () => {
     >
       {sortedProducts.length === 0 && !search ? (
         <EmptyState
-          title="No Stocks"
-          description="Add a stock entry to start tracking inventory."
-          actionLabel="Add Stock Entry"
+          title="暂无库存"
+          description="新增入库记录，开始管理库存。"
+          actionLabel="新增入库记录"
           onAction={() => navigate(ROUTES.stockEntryNew)}
         />
       ) : sortedProducts.length === 0 ? (
         <EmptyState
-          title="No Results"
-          description={`No products found matching "${search}"`}
+          title="没有匹配结果"
+          description={`未找到与“${search}”匹配的商品`}
         />
       ) : (
         <StockProductsTable

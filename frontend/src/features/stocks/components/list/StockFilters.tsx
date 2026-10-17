@@ -22,16 +22,16 @@ export const StockFilters: React.FC<StockFiltersProps> = ({
   return (
     <Group align="flex-end" style={{ width: '100%' }} wrap="nowrap">
       <TextInput
-        placeholder="Search by product name, SKU, or stock identifier..."
+        placeholder="按商品名称、商品编码或入库编号搜索…"
         leftSection={<IconSearch size={16} />}
         rightSection={
           searchInput ? (
-            <Tooltip label="Clear search">
+            <Tooltip label="清除搜索">
               <ActionIcon
                 variant="subtle"
                 color="gray"
                 onClick={onSearchClear}
-                aria-label="Clear search"
+                aria-label="清除搜索"
               >
                 <IconX size={16} />
               </ActionIcon>
@@ -49,14 +49,14 @@ export const StockFilters: React.FC<StockFiltersProps> = ({
         style={{ flex: 1 }}
       />
       <Select
-        placeholder="Sort by"
+        placeholder="排序方式"
         data={[
-          { value: 'name_asc', label: 'Name (A to Z)' },
-          { value: 'name_desc', label: 'Name (Z to A)' },
-          { value: 'quantity_desc', label: 'Stock (High to Low)' },
-          { value: 'quantity_asc', label: 'Stock (Low to High)' },
-          { value: 'value_desc', label: 'Value (High to Low)' },
-          { value: 'value_asc', label: 'Value (Low to High)' },
+          { value: 'name_asc', label: '名称升序' },
+          { value: 'name_desc', label: '名称降序' },
+          { value: 'quantity_desc', label: '库存从高到低' },
+          { value: 'quantity_asc', label: '库存从低到高' },
+          { value: 'value_desc', label: '金额从高到低' },
+          { value: 'value_asc', label: '金额从低到高' },
         ]}
         value={ordering}
         onChange={(val) => onOrderingChange(val || 'quantity_desc')}

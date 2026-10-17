@@ -22,12 +22,12 @@ export const SalesOrdersFilters: React.FC<SalesOrdersFiltersProps> = ({
   return (
     <Group align="flex-end" style={{ width: '100%' }} wrap="nowrap">
       <TextInput
-        placeholder="Search by order code, customer, or product..."
+        placeholder="按订单编号、客户或商品搜索…"
         leftSection={<IconSearch size={16} />}
         rightSection={
           searchInput ? (
-            <Tooltip label="Clear search">
-              <ActionIcon variant="subtle" color="gray" onClick={onSearchClear} aria-label="Clear search">
+            <Tooltip label="清除搜索">
+              <ActionIcon variant="subtle" color="gray" onClick={onSearchClear} aria-label="清除搜索">
                 <IconX size={16} />
               </ActionIcon>
             </Tooltip>
@@ -44,11 +44,11 @@ export const SalesOrdersFilters: React.FC<SalesOrdersFiltersProps> = ({
         style={{ flex: 1 }}
       />
       <Select
-        placeholder="Sort by"
+        placeholder="排序方式"
         data={[
-          { value: '-sold_at', label: 'Newest First' },
-          { value: 'sold_at', label: 'Oldest First' },
-          { value: '-total_revenue', label: 'Highest Revenue' },
+          { value: '-sold_at', label: '最新优先' },
+          { value: 'sold_at', label: '最早优先' },
+          { value: '-total_revenue', label: '收入最高优先' },
         ]}
         value={ordering}
         onChange={(value) => onOrderingChange(value || '-sold_at')}

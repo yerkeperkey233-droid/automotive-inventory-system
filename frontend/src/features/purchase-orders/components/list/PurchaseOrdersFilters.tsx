@@ -22,16 +22,16 @@ export const PurchaseOrdersFilters: React.FC<PurchaseOrdersFiltersProps> = ({
   return (
     <Group align="flex-end" style={{ width: '100%' }} wrap="nowrap">
       <TextInput
-        placeholder="Search by order code, supplier, or product..."
+        placeholder="按订单编号、供应商或商品搜索…"
         leftSection={<IconSearch size={16} />}
         rightSection={
           searchInput ? (
-            <Tooltip label="Clear search">
+            <Tooltip label="清除搜索">
               <ActionIcon
                 variant="subtle"
                 color="gray"
                 onClick={onSearchClear}
-                aria-label="Clear search"
+                aria-label="清除搜索"
               >
                 <IconX size={16} />
               </ActionIcon>
@@ -49,11 +49,11 @@ export const PurchaseOrdersFilters: React.FC<PurchaseOrdersFiltersProps> = ({
         style={{ flex: 1 }}
       />
       <Select
-        placeholder="Sort by"
+        placeholder="排序方式"
         data={[
-          { value: '-ordered_at', label: 'Newest First' },
-          { value: 'ordered_at', label: 'Oldest First' },
-          { value: '-total_cost', label: 'Highest Cost' },
+          { value: '-ordered_at', label: '最新优先' },
+          { value: 'ordered_at', label: '最早优先' },
+          { value: '-total_cost', label: '成本最高优先' },
         ]}
         value={ordering}
         onChange={(val) => onOrderingChange(val || '-ordered_at')}

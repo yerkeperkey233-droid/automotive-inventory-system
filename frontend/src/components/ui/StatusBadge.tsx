@@ -4,13 +4,13 @@ import { Badge, BadgeProps } from '@mantine/core';
 type StatusType = 'pending' | 'received' | 'shipped' | 'cancelled' | 'draft' | 'active' | 'confirmed';
 
 const STATUS_VARIANTS: Record<StatusType, { color: string; label: string }> = {
-  pending: { color: 'yellow', label: 'Pending' },
-  received: { color: 'green', label: 'Received' },
-  shipped: { color: 'blue', label: 'Shipped' },
-  cancelled: { color: 'red', label: 'Cancelled' },
-  draft: { color: 'gray', label: 'Draft' },
-  active: { color: 'green', label: 'Active' },
-  confirmed: { color: 'blue', label: 'Confirmed' },
+  pending: { color: 'yellow', label: '待处理' },
+  received: { color: 'green', label: '已收货' },
+  shipped: { color: 'blue', label: '已发货' },
+  cancelled: { color: 'red', label: '已取消' },
+  draft: { color: 'gray', label: '草稿' },
+  active: { color: 'green', label: '已启用' },
+  confirmed: { color: 'blue', label: '已确认' },
 };
 
 interface StatusBadgeProps extends Omit<BadgeProps, 'children'> {
@@ -31,6 +31,9 @@ export const normalizeStatus = (status: string): StatusType => {
 
   return 'pending';
 };
+
+export const getStatusLabel = (status: string): string =>
+  STATUS_VARIANTS[normalizeStatus(status)].label;
 
 export const StatusBadge: React.FC<StatusBadgeProps> = ({
   status,

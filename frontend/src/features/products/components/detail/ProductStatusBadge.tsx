@@ -9,12 +9,12 @@ export const ProductStatusBadge: React.FC<ProductStatusBadgeProps> = ({
   quantityInStock,
 }) => {
   if (quantityInStock <= 0) {
-    return <Badge color="red">Out of stock</Badge>;
+    return <Badge color="red">无库存</Badge>;
   }
 
   if (quantityInStock < 10) {
-    return <Badge color="yellow">Low stock</Badge>;
+    return <Badge color="yellow">库存不足</Badge>;
   }
 
-  return <Badge color="green">In stock</Badge>;
+  return <Badge color="green">有库存</Badge>;
 };

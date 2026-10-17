@@ -29,7 +29,7 @@ const TopBar: React.FC = () => {
         <div />
 
         <Group>
-          <Tooltip label={colorScheme === 'dark' ? 'Light mode' : 'Dark mode'}>
+          <Tooltip label={colorScheme === 'dark' ? '浅色模式' : '深色模式'}>
             <ActionIcon
               onClick={() => toggleColorScheme()}
               variant="default"
@@ -46,7 +46,7 @@ const TopBar: React.FC = () => {
             color="red"
             size="lg"
             radius="md"
-            title="Logout"
+            title="退出登录"
           >
             <IconLogout size={18} />
           </ActionIcon>

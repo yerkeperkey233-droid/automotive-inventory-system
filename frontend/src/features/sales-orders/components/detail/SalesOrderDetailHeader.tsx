@@ -2,7 +2,7 @@ import React from 'react';
 import { ActionIcon, Badge, Button, Group, Menu, Paper, Stack, Text, Tooltip } from '@mantine/core';
 import { IconCheck, IconChevronDown, IconPencil, IconRotateClockwise, IconTrash, IconX } from '@tabler/icons-react';
 import { formatCurrency, formatDate } from '@shared/utils/formatting';
-import { normalizeStatus } from '@components/ui/StatusBadge';
+import { normalizeStatus, getStatusLabel } from '@components/ui/StatusBadge';
 import type { SalesOrder } from '../../salesOrder.types';
 
 interface SalesOrderDetailHeaderProps {
@@ -49,23 +49,23 @@ export const SalesOrderDetailHeader: React.FC<SalesOrderDetailHeaderProps> = ({
         <Stack gap={0}>
           <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700 }}>{order.order_number}</h1>
           <Text size="sm" c="dimmed">
-            Sales Order
+            销售订单
           </Text>
         </Stack>
         <Group gap="xs">
-          <Tooltip label="Edit order">
+          <Tooltip label="编辑订单">
             <ActionIcon size="lg" variant="light" color="blue" onClick={onEdit}>
               <IconPencil size={20} />
             </ActionIcon>
           </Tooltip>
-          <Tooltip label="Delete order">
+          <Tooltip label="删除订单">
             <ActionIcon size="lg" variant="light" color="red" onClick={onDelete}>
               <IconTrash size={20} />
             </ActionIcon>
           </Tooltip>
           <Menu position="bottom-end" shadow="md">
             <Menu.Target>
-              <Tooltip label="Change order status" position="top">
+              <Tooltip label="变更订单状态" position="top">
                 <Button
                   variant="light"
                   color={getStatusColor(normalizedStatus)}
@@ -74,10 +74,10 @@ export const SalesOrderDetailHeader: React.FC<SalesOrderDetailHeaderProps> = ({
                 >
                   <Group gap="xs">
                     <Text fw={600} size="sm">
-                      Change status
+                      变更状态
                     </Text>
                     <Badge color={getStatusColor(normalizedStatus)} variant="white">
-                      {normalizedStatus.charAt(0).toUpperCase() + normalizedStatus.slice(1)}
+                      {getStatusLabel(normalizedStatus)}
                     </Badge>
                   </Group>
                 </Button>
@@ -87,10 +87,10 @@ export const SalesOrderDetailHeader: React.FC<SalesOrderDetailHeaderProps> = ({
               {normalizedStatus === 'draft' && (
                 <>
                   <Menu.Item leftSection={<IconCheck size={14} />} onClick={onConfirm} disabled={confirmLoading}>
-                    Confirm Order
+                    确认订单
                   </Menu.Item>
                   <Menu.Item leftSection={<IconX size={14} />} color="red" onClick={onCancel} disabled={cancelLoading}>
-                    Cancel Order
+                    取消订单
                   </Menu.Item>
                 </>
               )}
@@ -101,10 +101,10 @@ export const SalesOrderDetailHeader: React.FC<SalesOrderDetailHeaderProps> = ({
                     onClick={onReopen}
                     disabled={reopenLoading}
                   >
-                    Reopen Order
+                    重新打开订单
                   </Menu.Item>
                   <Menu.Item leftSection={<IconX size={14} />} color="red" onClick={onCancel} disabled={cancelLoading}>
-                    Cancel Order
+                    取消订单
                   </Menu.Item>
                 </>
               )}
@@ -117,21 +117,21 @@ export const SalesOrderDetailHeader: React.FC<SalesOrderDetailHeaderProps> = ({
         <Group justify="space-between">
           <div>
             <Text size="sm" c="dimmed" fw={500}>
-              Customer
+              客户
             </Text>
-            <Text fw={600}>{order.customer_name || 'N/A'}</Text>
+            <Text fw={600}>{order.customer_name || '暂无'}</Text>
           </div>
 
           <div>
             <Text size="sm" c="dimmed" fw={500}>
-              Order Date
+              订单日期
             </Text>
             <Text>{formatDate(order.sold_at)}</Text>
           </div>
 
           <div>
             <Text size="sm" c="dimmed" fw={500}>
-              Total Revenue
+              总收入
             </Text>
             <Text fw={700} size="lg" c="blue">
               {formatCurrency(order.total_revenue)}

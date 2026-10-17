@@ -22,10 +22,10 @@ const ProductCreatePage: React.FC = () => {
       amount: 0,
     },
     validate: {
-      sku: (value) => (value.length === 0 ? 'SKU is required' : null),
-      name: (value) => (value.length === 0 ? 'Name is required' : null),
-      base_unit: (value) => (value ? null : 'Unit is required'),
-      amount: (value) => (value < 0 ? 'Amount must be non-negative' : null),
+      sku: (value) => (value.length === 0 ? '请输入商品编码' : null),
+      name: (value) => (value.length === 0 ? '请输入名称' : null),
+      base_unit: (value) => (value ? null : '请选择计量单位'),
+      amount: (value) => (value < 0 ? '含量不能为负数' : null),
     },
   });
 
@@ -46,12 +46,12 @@ const ProductCreatePage: React.FC = () => {
     <Container size="md" py="xl">
       <Stack gap="lg">
         <ProductHeader
-          title="Create Product"
-          subtitle="Add a new catalog item and define its inventory unit."
+          title="创建商品"
+          subtitle="新增商品并设置其库存计量单位。"
           actions={
             <Group>
               <Button variant="light" onClick={() => navigate(ROUTES.products)}>
-                Back to Products
+                返回商品列表
               </Button>
             </Group>
           }
@@ -61,7 +61,7 @@ const ProductCreatePage: React.FC = () => {
           form={form}
           errorMessage={errorMessage}
           isSubmitting={createMutation.isPending}
-          submitLabel="Create Product"
+          submitLabel="创建商品"
           onSubmit={handleSubmit}
           onCancel={() => navigate(ROUTES.products)}
         />

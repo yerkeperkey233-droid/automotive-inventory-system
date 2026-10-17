@@ -35,19 +35,19 @@ const ProductDetailPage: React.FC = () => {
         await deleteMutation.mutateAsync(productId);
         navigate(ROUTES.products);
       } catch (error) {
-        console.error('Delete failed:', error);
+        console.error('删除失败：', error);
       }
     }
   };
 
   if (query.isLoading) {
-    return <LoadingState message="Loading product..." />;
+    return <LoadingState message="正在加载商品…" />;
   }
 
   if (query.isError || !query.data) {
     return (
       <ErrorState
-        message="Failed to load product"
+        message="加载商品失败"
         onRetry={() => query.refetch()}
       />
     );
@@ -60,10 +60,10 @@ const ProductDetailPage: React.FC = () => {
       <Stack gap="lg">
         <ProductHeader
           title={product.name}
-          subtitle={`SKU: ${product.sku}`}
+          subtitle={`商品编码：${product.sku}`}
           actions={
             <Group>
-              <Tooltip label="Edit product">
+              <Tooltip label="编辑商品">
                 <ActionIcon
                   size="lg"
                   variant="light"
@@ -73,7 +73,7 @@ const ProductDetailPage: React.FC = () => {
                   <IconPencil size={20} />
                 </ActionIcon>
               </Tooltip>
-              <Tooltip label="Delete product">
+              <Tooltip label="删除商品">
                 <ActionIcon
                   size="lg"
                   variant="light"
@@ -84,7 +84,7 @@ const ProductDetailPage: React.FC = () => {
                 </ActionIcon>
               </Tooltip>
               <Button variant="light" onClick={() => navigate(ROUTES.products)}>
-                Back
+                返回
               </Button>
             </Group>
           }
@@ -102,24 +102,23 @@ const ProductDetailPage: React.FC = () => {
         <Modal
           opened={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}
-          title="Delete Product"
+          title="删除商品"
           centered
         >
           <Stack>
             <Text>
-              Are you sure you want to delete this product? This action cannot
-              be undone.
+              确定删除该商品吗？此操作无法撤销。
             </Text>
             <Group justify="flex-end">
               <Button variant="light" onClick={() => setShowDeleteModal(false)}>
-                Cancel
+                取消
               </Button>
               <Button
                 color="red"
                 loading={deleteMutation.isPending}
                 onClick={handleDelete}
               >
-                Delete
+                删除
               </Button>
             </Group>
           </Stack>

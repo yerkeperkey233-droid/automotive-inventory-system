@@ -29,7 +29,7 @@ class PurchaseOrderItemViewSet(UserFilteredViewSet):
         """Create item for user's purchase order."""
         purchase_order = serializer.validated_data.get('purchase_order')
         if purchase_order.user != self.request.user:
-            raise PermissionError("Cannot add item to another user's purchase order")
+            raise PermissionError("不能为其他用户的采购订单添加明细")
         serializer.save()
 
 
@@ -58,7 +58,7 @@ class PurchaseOrderViewSet(UserFilteredViewSet):
 
         if target_status == 'received':
             return Response(
-                {'detail': 'Use receive_with_entries to mark a purchase order as received.'},
+                {'detail': '请先登记入库记录，再完成采购收货。'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -82,17 +82,17 @@ class PurchaseOrderViewSet(UserFilteredViewSet):
         if po.status != 'draft':
             if po.status == 'confirmed':
                 return Response(
-                    {'detail': 'This order is already confirmed.'},
+                    {'detail': '该订单已经确认。'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
             elif po.status == 'received':
                 return Response(
-                    {'detail': 'Cannot confirm a received order. This is not the usual workflow.'},
+                    {'detail': '已收货的订单不能再次确认。'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
             elif po.status == 'cancelled':
                 return Response(
-                    {'detail': 'Cannot confirm a cancelled order. This is not the usual workflow.'},
+                    {'detail': '已取消的订单不能确认。'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
         
@@ -113,12 +113,12 @@ class PurchaseOrderViewSet(UserFilteredViewSet):
         if po.status not in ('draft', 'confirmed'):
             if po.status == 'cancelled':
                 return Response(
-                    {'detail': 'This order is already cancelled.'},
+                    {'detail': '该订单已经取消。'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
             elif po.status == 'received':
                 return Response(
-                    {'detail': 'Cannot cancel a received order. This is not the usual workflow.'},
+                    {'detail': '已收货的订单不能取消。'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
         
@@ -132,17 +132,17 @@ class PurchaseOrderViewSet(UserFilteredViewSet):
         
     @action(detail=True, methods=['post'])
     def receive(self, request, pk=None):
-        """Manual stock entries are required before receiving a purchase order."""
+        """采购订单收货前必须登记入库记录。"""
         po = self.get_object()
         
         if po.status == 'received':
             return Response(
-                {'error': 'Purchase order already received'},
+                {'error': '采购订单已经收货'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         return Response(
-            {'detail': 'Use receive_with_entries to mark a purchase order as received.'},
+            {'detail': '请先登记入库记录，再完成采购收货。'},
             status=status.HTTP_400_BAD_REQUEST
         )
 
@@ -153,21 +153,21 @@ class PurchaseOrderViewSet(UserFilteredViewSet):
 
         if po.status == 'received':
             return Response(
-                {'error': 'Purchase order already received'},
+                {'error': '采购订单已经收货'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         po_items = list(po.items.select_related('product').order_by('id'))
         if not po_items:
             return Response(
-                {'error': 'Purchase order has no items to receive'},
+                {'error': '采购订单没有可收货的明细'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         entries_data = request.data.get('entries', [])
         if not entries_data:
             return Response(
-                {'error': 'Entries are required to receive this purchase order'},
+                {'error': '该采购订单收货前必须填写入库记录'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -182,7 +182,7 @@ class PurchaseOrderViewSet(UserFilteredViewSet):
                 }
 
                 if expected_item_ids != provided_item_ids:
-                    raise ValueError('Each purchase order item must be fully received before completing this action')
+                    raise ValueError('完成收货前必须为每条采购明细足额登记入库')
 
                 received_at = timezone.now()
 
@@ -195,7 +195,7 @@ class PurchaseOrderViewSet(UserFilteredViewSet):
                     quantity_received = Decimal(str(entry_data['quantity_received']))
                     if quantity_received <= Decimal('0'):
                         raise ValueError(
-                            f'Quantity received for product {po_item.product.sku} must be greater than zero'
+                            f'商品的入库数量：{po_item.product.sku} 必须大于 0'
                         )
                     stock_entry = StockEntry.objects.create(
                         user=request.user,
@@ -205,7 +205,7 @@ class PurchaseOrderViewSet(UserFilteredViewSet):
                         quantity_received=quantity_received,
                         received_at=received_at,
                         expiration_date=entry_data.get('expiration_date') or None,
-                        notes=f"Auto-created from purchase order {po.order_number}",
+                        notes=f"由采购订单自动创建：{po.order_number}",
                     )
                     created_entries.append(stock_entry)
 
@@ -217,7 +217,7 @@ class PurchaseOrderViewSet(UserFilteredViewSet):
                     )
                     if received_total != po_item.quantity:
                         raise ValueError(
-                            f'Entries for product {po_item.product.sku} must total {po_item.quantity}'
+                            f'商品入库记录：{po_item.product.sku}，合计必须为 {po_item.quantity}'
                         )
 
                 po.status = 'received'
@@ -225,7 +225,7 @@ class PurchaseOrderViewSet(UserFilteredViewSet):
             
             return Response({
                 'status': 'success',
-                'message': f'{len(created_entries)} stock entries created',
+                'message': f'{len(created_entries)} 条入库记录已创建',
                 'stock_entries': StockEntrySerializer(created_entries, many=True).data
             })
         except Exception as e:
@@ -241,7 +241,7 @@ class PurchaseOrderViewSet(UserFilteredViewSet):
 
         if po.status != 'received':
             return Response(
-                {'detail': 'Only received purchase orders can be reopened.'},
+                {'detail': '只有已收货的采购订单可以重新打开。'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -257,7 +257,7 @@ class PurchaseOrderViewSet(UserFilteredViewSet):
         if allocated_entries.exists():
             return Response(
                 {
-                    'detail': 'Cannot reopen this purchase order because linked stock entries already have allocations.',
+                    'detail': '关联的入库记录已被分配，无法重新打开该采购订单。',
                     'allocated_stock_entry_count': allocated_entries.count(),
                 },
                 status=status.HTTP_400_BAD_REQUEST
@@ -267,7 +267,7 @@ class PurchaseOrderViewSet(UserFilteredViewSet):
         if linked_entries.exists() and not delete_stock_entries:
             return Response(
                 {
-                    'detail': 'This purchase order already created stock entries. Reopening requires deleting them.',
+                    'detail': '该采购订单已生成入库记录，重新打开前需删除这些记录。',
                     'requires_confirmation': True,
                     'stock_entry_count': linked_entries.count(),
                 },
@@ -285,7 +285,7 @@ class PurchaseOrderViewSet(UserFilteredViewSet):
         return Response(
             {
                 'status': 'success',
-                'message': 'Purchase order reopened.',
+                'message': '采购订单已重新打开。',
                 'deleted_stock_entries': deleted_stock_entries,
             },
             status=status.HTTP_200_OK

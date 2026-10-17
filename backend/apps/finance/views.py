@@ -49,7 +49,7 @@ def parse_ids(raw_ids: str | None):
             if item.strip()
         }
     except ValueError as exc:
-        raise ValidationError({'ids': 'Expected a comma-separated list of integer ids.'}) from exc
+        raise ValidationError({'ids': '请提供以逗号分隔的整数编号列表。'}) from exc
 
 
 def parse_period(start_date_raw: str | None, end_date_raw: str | None):
@@ -57,13 +57,13 @@ def parse_period(start_date_raw: str | None, end_date_raw: str | None):
     end_date = parse_date(end_date_raw) if end_date_raw else None
 
     if start_date_raw and start_date is None:
-        raise ValidationError({'start_date': 'Expected YYYY-MM-DD.'})
+        raise ValidationError({'start_date': '日期格式必须为 YYYY-MM-DD。'})
 
     if end_date_raw and end_date is None:
-        raise ValidationError({'end_date': 'Expected YYYY-MM-DD.'})
+        raise ValidationError({'end_date': '日期格式必须为 YYYY-MM-DD。'})
 
     if start_date and end_date and start_date > end_date:
-        raise ValidationError({'end_date': 'End date must be on or after start date.'})
+        raise ValidationError({'end_date': '结束日期不能早于开始日期。'})
 
     return start_date, end_date
 

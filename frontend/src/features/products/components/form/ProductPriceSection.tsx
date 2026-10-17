@@ -14,13 +14,13 @@ export const ProductPriceSection: React.FC<ProductPriceSectionProps> = ({
 }) => {
   return (
     <Stack gap="xs">
-      <Text fw={600}>Product amount</Text>
+      <Text fw={600}>单件含量</Text>
       <NumberInput
-        label="Amount per product"
-        placeholder="Enter the amount contained in one product"
+        label="单件含量"
+        placeholder="请输入单件商品的含量"
         min={0}
         step={0.01}
-        description="This is the quantity of kg, g, L, mL, or units for one product."
+        description="单件商品的含量，单位可选千克、克、升、毫升或件。"
         {...form.getInputProps('amount')}
         disabled={disabled}
       />

@@ -93,13 +93,13 @@ const PurchaseOrderEditPage: React.FC = () => {
     const isItemsLocked = orderQuery.data?.status === 'received';
 
     if (!formData.order_number.trim()) {
-      alert('Order number is required');
+      alert('请输入订单编号');
       return;
     }
 
     const validItems = items.filter((item) => item.product && item.quantity > 0);
     if (!isItemsLocked && validItems.length === 0) {
-      alert('At least one item is required');
+      alert('请至少添加一条明细');
       return;
     }
 
@@ -134,13 +134,13 @@ const PurchaseOrderEditPage: React.FC = () => {
   };
 
   if (orderQuery.isLoading) {
-    return <LoadingState message="Loading purchase order..." />;
+    return <LoadingState message="正在加载采购订单…" />;
   }
 
   if (orderQuery.isError || !orderQuery.data) {
     return (
       <ErrorState
-        message="Failed to load purchase order"
+        message="加载采购订单失败"
         onRetry={() => orderQuery.refetch()}
       />
     );
@@ -154,7 +154,7 @@ const PurchaseOrderEditPage: React.FC = () => {
   return (
     <Container size="lg" py="xl">
       <Stack gap="lg">
-        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700 }}>Edit Purchase Order</h1>
+        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700 }}>编辑采购订单</h1>
 
         <Paper p="lg" radius="md" withBorder>
           {errorMessage && (
@@ -182,7 +182,7 @@ const PurchaseOrderEditPage: React.FC = () => {
 
             {isItemsLocked ? (
               <Text size="sm" c="dimmed">
-                Order items are locked because this purchase order is already received.
+                该采购订单已收货，明细不可修改。
               </Text>
             ) : null}
 
@@ -192,13 +192,13 @@ const PurchaseOrderEditPage: React.FC = () => {
                 onClick={() => navigate(`/purchase-orders/${orderId}`)}
                 disabled={updateMutation.isPending}
               >
-                Cancel
+                取消
               </Button>
               <Button
                 onClick={handleSubmit}
                 loading={updateMutation.isPending}
               >
-                Save Changes
+                保存修改
               </Button>
             </Group>
           </Stack>

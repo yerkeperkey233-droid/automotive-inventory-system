@@ -12,10 +12,10 @@ export const ProductToolbar: React.FC<ProductToolbarProps> = ({
 }) => {
   return (
     <ListPageHeader
-      title="Products"
+      title="商品管理"
       itemCount={productCount}
       itemLabel="product"
-      actionLabel="New Product"
+      actionLabel="新增商品"
       onAction={onCreate}
     />
   );

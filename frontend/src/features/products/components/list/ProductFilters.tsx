@@ -17,17 +17,17 @@ export const ProductFilters: React.FC<ProductFiltersProps> = ({
 }) => {
   return (
     <TextInput
-      placeholder="Search products by SKU or name..."
+      placeholder="按商品编码或名称搜索…"
       leftSection={<IconSearch size={16} />}
       rightSection={
         <Group gap={4} wrap="nowrap">
           {value ? (
-            <Tooltip label="Clear search">
+            <Tooltip label="清除搜索">
               <ActionIcon
                 variant="subtle"
                 color="gray"
                 onClick={onClear}
-                aria-label="Clear search"
+                aria-label="清除搜索"
               >
                 <IconX size={16} />
               </ActionIcon>

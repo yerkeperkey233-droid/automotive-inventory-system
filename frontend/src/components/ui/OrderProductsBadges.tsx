@@ -17,7 +17,7 @@ export const OrderProductsBadges: React.FC<OrderProductsBadgesProps> = ({
   badgeColor,
 }) => {
   if (!items.length) {
-    return <>N/A</>;
+    return <>暂无</>;
   }
 
   const visibleItems = items.slice(0, 2);
@@ -34,7 +34,7 @@ export const OrderProductsBadges: React.FC<OrderProductsBadgesProps> = ({
         <HoverCard width={280} position="bottom" withArrow shadow="md" openDelay={100} closeDelay={100}>
           <HoverCard.Target>
             <Badge variant="outline" color="gray" style={{ cursor: 'pointer' }}>
-              +{hiddenItems.length} more
+              +{hiddenItems.length} 项更多商品
             </Badge>
           </HoverCard.Target>
           <HoverCard.Dropdown>
@@ -43,7 +43,7 @@ export const OrderProductsBadges: React.FC<OrderProductsBadgesProps> = ({
                 <Group key={item.id} justify="space-between" gap="sm" wrap="nowrap">
                   <Text size="sm">{item.label}</Text>
                   <Text size="xs" c="dimmed">
-                    x{item.quantity}
+                    ×{item.quantity}
                   </Text>
                 </Group>
               ))}

@@ -30,8 +30,8 @@ export const StockFormFields: React.FC<StockFormFieldsProps> = ({
   return (
     <Stack gap="md">
       <Select
-        label="Product"
-        placeholder="Select a product"
+        label="商品"
+        placeholder="请选择商品"
         data={productOptions}
         {...form.getInputProps('product')}
         disabled={disabled || isLoadingProducts}
@@ -41,11 +41,11 @@ export const StockFormFields: React.FC<StockFormFieldsProps> = ({
 
       {showSourceType ? (
         <Select
-          label="Source Type"
-          placeholder="Select source type"
+          label="来源类型"
+          placeholder="请选择来源类型"
           data={[
-            { value: 'manual', label: 'Manual Entry' },
-            { value: 'purchase_order', label: 'Purchase Order' },
+            { value: 'manual', label: '手工入库' },
+            { value: 'purchase_order', label: '采购订单' },
           ]}
           {...form.getInputProps('source_type')}
           disabled={disabled || disableSourceType}
@@ -54,8 +54,8 @@ export const StockFormFields: React.FC<StockFormFieldsProps> = ({
       ) : null}
 
       <NumberInput
-        label="Quantity Received"
-        placeholder="Enter quantity"
+        label="入库数量"
+        placeholder="请输入数量"
         min={1}
         {...form.getInputProps('quantity_received')}
         disabled={disabled}
@@ -63,7 +63,7 @@ export const StockFormFields: React.FC<StockFormFieldsProps> = ({
       />
 
       <TextInput
-        label="Received Date"
+        label="入库日期"
         type="date"
         {...form.getInputProps('received_at')}
         disabled={disabled}
@@ -71,7 +71,7 @@ export const StockFormFields: React.FC<StockFormFieldsProps> = ({
       />
 
       <TextInput
-        label="Expiration Date (Optional)"
+        label="有效期截止日期（选填）"
         type="date"
         {...form.getInputProps('expiration_date')}
         disabled={disabled}

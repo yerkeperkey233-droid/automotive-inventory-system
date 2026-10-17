@@ -92,13 +92,13 @@ const SalesOrderEditPage: React.FC = () => {
     const isItemsLocked = orderQuery.data?.status === 'confirmed';
 
     if (!formData.order_number.trim()) {
-      alert('Order number is required');
+      alert('请输入订单编号');
       return;
     }
 
     const validItems = items.filter((item) => item.product && item.quantity > 0);
     if (!isItemsLocked && validItems.length === 0) {
-      alert('At least one item is required');
+      alert('请至少添加一条明细');
       return;
     }
 
@@ -133,11 +133,11 @@ const SalesOrderEditPage: React.FC = () => {
   };
 
   if (orderQuery.isLoading) {
-    return <LoadingState message="Loading sales order..." />;
+    return <LoadingState message="正在加载销售订单…" />;
   }
 
   if (orderQuery.isError || !orderQuery.data) {
-    return <ErrorState message="Failed to load sales order" onRetry={() => orderQuery.refetch()} />;
+    return <ErrorState message="加载销售订单失败" onRetry={() => orderQuery.refetch()} />;
   }
 
   const errorMessage = updateMutation.error ? getErrorMessage(updateMutation.error) : null;
@@ -146,7 +146,7 @@ const SalesOrderEditPage: React.FC = () => {
   return (
     <Container size="lg" py="xl">
       <Stack gap="lg">
-        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700 }}>Edit Sales Order</h1>
+        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 700 }}>编辑销售订单</h1>
 
         <Paper p="lg" radius="md" withBorder>
           {errorMessage && (
@@ -174,7 +174,7 @@ const SalesOrderEditPage: React.FC = () => {
 
             {isItemsLocked ? (
               <Text size="sm" c="dimmed">
-                Order items are locked because this sales order is already confirmed.
+                该销售订单已确认，明细不可修改。
               </Text>
             ) : null}
 
@@ -184,10 +184,10 @@ const SalesOrderEditPage: React.FC = () => {
                 onClick={() => navigate(`/sales-orders/${orderId}`)}
                 disabled={updateMutation.isPending}
               >
-                Cancel
+                取消
               </Button>
               <Button onClick={handleSubmit} loading={updateMutation.isPending}>
-                Save Changes
+                保存修改
               </Button>
             </Group>
           </Stack>

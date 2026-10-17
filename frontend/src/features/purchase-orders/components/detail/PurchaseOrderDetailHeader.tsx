@@ -19,7 +19,7 @@ import {
   IconRotateClockwise,
 } from '@tabler/icons-react';
 import { formatDate, formatCurrency } from '@shared/utils/formatting';
-import { normalizeStatus } from '@components/ui/StatusBadge';
+import { normalizeStatus, getStatusLabel } from '@components/ui/StatusBadge';
 import type { PurchaseOrder } from '../../purchaseOrder.types';
 
 interface PurchaseOrderDetailHeaderProps {
@@ -74,11 +74,11 @@ export const PurchaseOrderDetailHeader: React.FC<PurchaseOrderDetailHeaderProps>
             {order.order_number}
           </h1>
           <Text size="sm" c="dimmed">
-            Purchase Order
+            采购订单
           </Text>
         </Stack>
         <Group gap="xs">
-          <Tooltip label="Edit order">
+          <Tooltip label="编辑订单">
             <ActionIcon
               size="lg"
               variant="light"
@@ -88,7 +88,7 @@ export const PurchaseOrderDetailHeader: React.FC<PurchaseOrderDetailHeaderProps>
               <IconPencil size={20} />
             </ActionIcon>
           </Tooltip>
-          <Tooltip label="Delete order">
+          <Tooltip label="删除订单">
             <ActionIcon
               size="lg"
               variant="light"
@@ -100,7 +100,7 @@ export const PurchaseOrderDetailHeader: React.FC<PurchaseOrderDetailHeaderProps>
           </Tooltip>
           <Menu position="bottom-end" shadow="md">
             <Menu.Target>
-              <Tooltip label="Change order status" position="top">
+              <Tooltip label="变更订单状态" position="top">
                 <Button
                   variant="light"
                   color={getStatusColor(normalizedStatus)}
@@ -109,10 +109,10 @@ export const PurchaseOrderDetailHeader: React.FC<PurchaseOrderDetailHeaderProps>
                 >
                   <Group gap="xs">
                     <Text fw={600} size="sm">
-                      Change status
+                      变更状态
                     </Text>
                     <Badge color={getStatusColor(normalizedStatus)} variant="white">
-                      {normalizedStatus.charAt(0).toUpperCase() + normalizedStatus.slice(1)}
+                      {getStatusLabel(normalizedStatus)}
                     </Badge>
                   </Group>
                 </Button>
@@ -126,7 +126,7 @@ export const PurchaseOrderDetailHeader: React.FC<PurchaseOrderDetailHeaderProps>
                     onClick={onConfirm}
                     disabled={confirmLoading}
                   >
-                    Confirm Order
+                    确认订单
                   </Menu.Item>
                   <Menu.Item
                     leftSection={<IconX size={14} />}
@@ -134,7 +134,7 @@ export const PurchaseOrderDetailHeader: React.FC<PurchaseOrderDetailHeaderProps>
                     onClick={onCancel}
                     disabled={cancelLoading}
                   >
-                    Cancel Order
+                    取消订单
                   </Menu.Item>
                 </>
               )}
@@ -145,7 +145,7 @@ export const PurchaseOrderDetailHeader: React.FC<PurchaseOrderDetailHeaderProps>
                     onClick={onReceive}
                     disabled={receiveLoading}
                   >
-                    Mark as Received
+                    确认收货
                   </Menu.Item>
                   <Menu.Item
                     leftSection={<IconX size={14} />}
@@ -153,7 +153,7 @@ export const PurchaseOrderDetailHeader: React.FC<PurchaseOrderDetailHeaderProps>
                     onClick={onCancel}
                     disabled={cancelLoading}
                   >
-                    Cancel Order
+                    取消订单
                   </Menu.Item>
                 </>
               )}
@@ -163,7 +163,7 @@ export const PurchaseOrderDetailHeader: React.FC<PurchaseOrderDetailHeaderProps>
                   onClick={onReopen}
                   disabled={reopenLoading}
                 >
-                  Reopen Order
+                  重新打开订单
                 </Menu.Item>
               )}
             </Menu.Dropdown>
@@ -175,21 +175,21 @@ export const PurchaseOrderDetailHeader: React.FC<PurchaseOrderDetailHeaderProps>
         <Group justify="space-between">
           <div>
             <Text size="sm" c="dimmed" fw={500}>
-              Supplier
+              供应商
             </Text>
-            <Text fw={600}>{order.supplier_name || 'N/A'}</Text>
+            <Text fw={600}>{order.supplier_name || '暂无'}</Text>
           </div>
 
           <div>
             <Text size="sm" c="dimmed" fw={500}>
-              Order Date
+              订单日期
             </Text>
             <Text>{formatDate(order.ordered_at)}</Text>
           </div>
 
           <div>
             <Text size="sm" c="dimmed" fw={500}>
-              Total Cost
+              总成本
             </Text>
             <Text fw={700} size="lg" c="blue">
               {formatCurrency(order.total_cost)}

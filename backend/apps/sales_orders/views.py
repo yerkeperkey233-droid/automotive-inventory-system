@@ -38,7 +38,7 @@ class SalesOrderItemViewSet(UserFilteredViewSet):
         """Create item for user's sales order."""
         sales_order = serializer.validated_data.get('sales_order')
         if sales_order.user != self.request.user:
-            raise PermissionError("Cannot add item to another user's sales order")
+            raise PermissionError("不能为其他用户的销售订单添加明细")
         serializer.save()
 
 
@@ -62,17 +62,17 @@ class SalesOrderViewSet(UserFilteredViewSet):
 
     @action(detail=True, methods=['post'])
     def confirm(self, request, pk=None):
-        """Manual allocations are required before confirming a sales order."""
+        """确认销售订单前必须分配库存。"""
         so = self.get_object()
         
         if so.status == 'confirmed':
             return Response(
-                {'detail': 'This sales order is already confirmed.'},
+                {'detail': '该销售订单已经确认。'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         return Response(
-            {'detail': 'Use confirm_with_allocations to confirm a sales order.'},
+            {'detail': '请先分配库存，再确认销售订单。'},
             status=status.HTTP_400_BAD_REQUEST
         )
     
@@ -83,7 +83,7 @@ class SalesOrderViewSet(UserFilteredViewSet):
         
         if so.status == 'cancelled':
             return Response(
-                {'message': 'Sales order is already cancelled'},
+                {'message': '销售订单已经取消'},
                 status=status.HTTP_200_OK
             )
         
@@ -99,7 +99,7 @@ class SalesOrderViewSet(UserFilteredViewSet):
             so.save()
         
         return Response(
-            {'status': 'success', 'message': 'Sales order cancelled'},
+            {'status': 'success', 'message': '销售订单已取消'},
             status=status.HTTP_200_OK
         )
     
@@ -110,21 +110,21 @@ class SalesOrderViewSet(UserFilteredViewSet):
         
         if so.status == 'confirmed':
             return Response(
-                {'error': 'Sales order already confirmed'},
+                {'error': '销售订单已经确认'},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
         sales_order_items = list(so.items.select_related('product').order_by('id'))
         if not sales_order_items:
             return Response(
-                {'error': 'Sales order has no items to confirm'},
+                {'error': '销售订单没有可确认的明细'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         allocations_data = request.data.get('allocations', [])
         if not allocations_data:
             return Response(
-                {'error': 'Allocations are required to confirm this sales order'},
+                {'error': '确认该销售订单前必须分配库存'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -139,7 +139,7 @@ class SalesOrderViewSet(UserFilteredViewSet):
                 }
 
                 if expected_item_ids != provided_item_ids:
-                    raise ValueError('Each sales order item must be fully allocated before confirmation')
+                    raise ValueError('确认前必须为每条销售明细足额分配库存')
 
                 for allocation_data in allocations_data:
                     sales_item = SalesOrderItem.objects.get(
@@ -155,13 +155,13 @@ class SalesOrderViewSet(UserFilteredViewSet):
 
                     if stock_entry.product_id != sales_item.product_id:
                         raise ValueError(
-                            f'Stock entry #{stock_entry.id} does not belong to product {sales_item.product.sku}.'
+                            f'入库记录 #{stock_entry.id} 不属于商品 {sales_item.product.sku}.'
                         )
                     
                     if stock_entry.quantity_available < quantity:
                         raise ValueError(
-                            f'Insufficient stock for stock entry #{stock_entry.id}. '
-                            f'Available: {stock_entry.quantity_available}, Required: {quantity}'
+                            f'入库记录库存不足，编号 #{stock_entry.id}. '
+                            f'Available: {stock_entry.quantity_available}，所需数量：{quantity}'
                         )
                     
                     allocation = StockAllocation.objects.create(
@@ -181,7 +181,7 @@ class SalesOrderViewSet(UserFilteredViewSet):
                     )
                     if allocated_total != sales_item.quantity:
                         raise ValueError(
-                            f'Allocations for product {sales_item.product.sku} must total {sales_item.quantity}'
+                            f'商品库存分配：{sales_item.product.sku}，合计必须为 {sales_item.quantity}'
                         )
                 
                 so.status = 'confirmed'
@@ -189,7 +189,7 @@ class SalesOrderViewSet(UserFilteredViewSet):
             
             return Response({
                 'status': 'success',
-                'message': f'{len(created_allocations)} stock allocations created',
+                'message': f'{len(created_allocations)} 条库存分配记录已创建',
                 'total_profit': so.total_profit,
                 'allocations': StockAllocationSerializer(created_allocations, many=True).data
             })
@@ -206,7 +206,7 @@ class SalesOrderViewSet(UserFilteredViewSet):
 
         if so.status != 'confirmed':
             return Response(
-                {'detail': 'Only confirmed sales orders can be reopened.'},
+                {'detail': '只有已确认的销售订单可以重新打开。'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -221,7 +221,7 @@ class SalesOrderViewSet(UserFilteredViewSet):
         if allocations.exists() and not delete_allocations:
             return Response(
                 {
-                    'detail': 'This sales order already has stock allocations. Reopening requires deleting them.',
+                    'detail': '该销售订单已有库存分配记录，重新打开前需删除这些记录。',
                     'requires_confirmation': True,
                     'allocation_count': allocations.count(),
                 },
@@ -239,7 +239,7 @@ class SalesOrderViewSet(UserFilteredViewSet):
         return Response(
             {
                 'status': 'success',
-                'message': 'Sales order reopened.',
+                'message': '销售订单已重新打开。',
                 'deleted_allocations': deleted_allocations,
             },
             status=status.HTTP_200_OK
